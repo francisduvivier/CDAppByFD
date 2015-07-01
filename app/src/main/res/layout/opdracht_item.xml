@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/opdracht_item_full"
+
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:measureWithLargestChild="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:id="@+id/opdracht_item_left">
+        <TextView
+            android:id="@+id/opdracht_item_opdrNr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="left_top"
+            />
+        <TextView
+            android:id="@+id/opdracht_item_plaats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="left_bot"
+            />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/opdracht_item_korteUitleg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="6"
+        android:text="mid" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1.5"
+        android:layout_height="wrap_content"
+        android:id="@+id/opdracht_item_right"
+        >
+        <TextView
+            android:id="@+id/opdracht_item_hBod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="right_top"
+            />
+        <TextView
+            android:id="@+id/opdracht_item_tijdVoorBod"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="right_bot"
+            />
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">CompudocApp</string>
+
+    <string name="title_open">Open Opdrachten</string>
+    <string name="title_factuur">Facturen</string>
+    <string name="title_afspraken">Afspraken 3</string>
+    <string name="title_mijn">Mijn Gegevens</string>
+
+    <string name="loading">Loading...</string>
+
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="title_opdracht_details">Details Opdracht</string>
+    <string name="title_activity_show_details">ShowDetailsActivity</string>
+    <string name="stuur_bod">Bieden!</string>
+    <string name="min_bod">Minimum bod:</string>
+    <string name="max_bod">Automatisch overbieden tot:</string>
+    <string name="fb_score">Feedback score:</string>
+    <string name="det_huidig_bod">Huidig bod:</string>
+    <string name="det_opdr_stand">Jouw opdrachtenstand:</string>
+
+
+</resources>
