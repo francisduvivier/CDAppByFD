@@ -40,11 +40,11 @@ public class OpdrachtenInfo {
 		String line = fullPage;
 //		 href=\"index.php?page=opdrachten/detail&amp;
 
-		String pattern = 
-				"(<td class=\"(opdracht[^>]*?)\"><a.*?opdrachtnr=([\\d+]*?)\">[\\d+]*?</a></td>"
-				+ "<td class=\"opdracht\".*?>(.*?)</td><td class=\"opdracht\" width=\"50%\"(.*?)>(.*?)</td>"
-				+ "<td class=\"opdracht\" style=\"text-align:center;\">(.*?)NC.*?</td>"
-				+ "<td class=\"opdracht\" >[<b>]*?([^<>]*)[</b>]*?</td>|hoofding\" style=\"text-align:left;padding:10px\" colspan=\"5\">(Opdrachten( van <b>(.*?)u en ouder)?))";
+		String pattern =
+				"(<td class=\"(opdracht[^\"]*)[^>]*?\"><a.*?opdrachtnr=([\\d+]*)[^>]*?\">[\\d+]*?</a></td>"
+						+ "<td class=\"opdracht\"[^>]*?>(.*?)</td><td class=\"opdracht\"[^>]*?width=\"50%\"([^>]*?)>(.*?)</td>"
+						+ "<td class=\"opdracht\"[^>]*?\">(.*?)NC.*?</td>"
+						+ "<td class=\"opdracht\"[^>]*?>[<b>]*?([^<>]*)[</b>]*?</td>|hoofding\" style=\"text-align:left;padding:10px\" colspan=\"5\">(Opdrachten( van <b>(.*?)u en ouder)?))";
 		// String pattern = ".*>";
 
 		// Create a Pattern object
