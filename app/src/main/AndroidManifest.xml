@@ -26,6 +26,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="duviwin.compudocapp.MainActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+
+                    android:host="www.compudoc.be"
+                    android:pathPattern="/index.php.*"
+                />
+                <!--page=opdrachten/detail.*opdrachtnr=.*-->
+            </intent-filter>
         </activity>
         <activity
             android:name=".SettingsActivity"

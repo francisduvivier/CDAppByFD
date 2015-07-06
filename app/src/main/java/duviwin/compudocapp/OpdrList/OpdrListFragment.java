@@ -12,11 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
 
 import duviwin.compudocapp.AppSettings;
@@ -24,8 +22,8 @@ import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.Events.EventSystem;
 import duviwin.compudocapp.Events.MyEventListener;
 import duviwin.compudocapp.OpdrachtDetails.Opdracht;
-import duviwin.compudocapp.R;
 import duviwin.compudocapp.OpdrachtDetails.ShowDetailsActivity;
+import duviwin.compudocapp.R;
 
 /**
  * A fragment representing a list of Items.
@@ -41,7 +39,7 @@ public class OpdrListFragment extends Fragment implements AbsListView.OnItemClic
     @Override
     public void handleMsg(String msg){
         opdrachten.add(Opdracht.getDummy(msg));
-//        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
 
     }
     private OnFragmentInteractionListener mListener;
@@ -59,7 +57,7 @@ public class OpdrListFragment extends Fragment implements AbsListView.OnItemClic
     public void fillAdapter(List<Opdracht> result){
 
 // mAdapter = new OpdrItemAdapter(getActivity(),R.layout.opdracht_item,result);
-//        opdrachten.clear();
+        opdrachten.clear();
         opdrachten.addAll(result);
 
         mAdapter.notifyDataSetChanged();
@@ -109,7 +107,7 @@ public class OpdrListFragment extends Fragment implements AbsListView.OnItemClic
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(R.id.my_opdr_list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -169,7 +167,7 @@ public class OpdrListFragment extends Fragment implements AbsListView.OnItemClic
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        void onFragmentInteraction(String id);
     }
     private class HttpAsyncTask extends AsyncTask<OpdrListFragment, Void, List<Opdracht>> {
         private OpdrListFragment f;

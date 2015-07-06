@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +24,13 @@ public class ShowDetailsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_show_details);
         Intent intent=getIntent();
         opdracht=(Opdracht) intent.getSerializableExtra("opdracht");
+        if(opdracht==null){
+            //In this case this is a call from an URI
+            String url=intent.getData().toString();
+            opdracht=Opdracht.getDummy("test");
+            opdracht.isDummy=false;
+            opdracht.opdrachtNr=url.replaceAll(".*opdrachtnr=([\\d]*).*","$1");
+        }
 
         class GetExtraInfoTask extends AsyncTask<Object, Void, Opdracht> {
             @Override
@@ -43,15 +50,15 @@ public class ShowDetailsActivity extends ActionBarActivity {
     public void update(Opdracht opdr){
         int i=0;
         for (String prop : opdr.allProperties) {
-            TextView tv=((TextView) findViewById(opdr.propertyIds[i++]));
+            TextView tv=((TextView) findViewById(Opdracht.propertyIds[i++]));
             tv.setPadding(0,5,0,5);
             tv.setText(prop);
             ((ViewGroup.MarginLayoutParams) tv.getLayoutParams()).setMargins(0,5,0,5);
             tv.setBackgroundColor(Color.parseColor(opdr.uitlegClr));
 
         }
-        ((TextView) findViewById(opdr.getPropertyId("gepost"))).setBackgroundColor(Color.parseColor(opdr.numberClr));
-        ((TextView) findViewById(opdr.getPropertyId("omschrijving"))).setBackgroundColor(Color.parseColor(opdr.uitlegClr));
+        findViewById(opdr.getPropertyId("gepost")).setBackgroundColor(Color.parseColor(opdr.numberClr));
+        findViewById(opdr.getPropertyId("omschrijving")).setBackgroundColor(Color.parseColor(opdr.uitlegClr));
         ((TextView) findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
 
 
@@ -87,7 +94,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
         opdracht.bied(minBod,maxBod, this);
     }
     public void openMaps(View view){
-        Uri geoLocation=Uri.parse("http://maps.google.com/maps?daddr="+opdracht.getProperty("straat")+", "+opdracht.getProperty("stad"));
+        String straat=opdracht.getProperty("straat").replaceAll(".*Adres: ","");
+        Uri geoLocation=Uri.parse("http://maps.google.com/maps?daddr="+straat+", "+opdracht.getProperty("stad"));
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(geoLocation);
         if (intent.resolveActivity(getPackageManager()) != null) {

@@ -17,7 +17,9 @@ import duviwin.compudocapp.R;
 public class Opdracht implements Serializable {
 	public static Opdracht getDummy(String text){
 		return new Opdracht(text);
-	};
+	}
+
+	public  boolean isDummy;
 	private Opdracht(String text){
 		this.opdrachtNr="";
 		this.plaats="";
@@ -25,14 +27,8 @@ public class Opdracht implements Serializable {
 		this.SPOED=false;
 		this.isDummy=true;
 	}
-	public final boolean isDummy;
-	public final String opdrachtNr, plaats, korteUitleg;
-	public String huidigBod="",  tijdVoorBod="";
 
-
-
-
-
+	public String opdrachtNr, huidigBod = "", tijdVoorBod = "", plaats, korteUitleg;
 	final boolean SPOED;
 	public String numberClr="#c8d2d7";
 	public String uitlegClr="#c8d2d7";
@@ -76,58 +72,104 @@ public class Opdracht implements Serializable {
 
 		String fullPage=Connection.getConnection().doGet(opdrachtUrl, "");
 		String pattern=
-				"<th class='detail1.*?>Gepost op: </th><td class='detail2.*?>(.*?)"//1 gepost op
-				+ "</td></tr><tr><th class='detail1.*?>Kenmerken: </th><td class='detail2.*?>(.*?)"//2 OS
-				+ "</td><td class='detail2.*?>(.*?)"  //3 hoeveelste categorie
-				+ "</td><tr><th class='detail1.*?>Omschrijving: </th><td class='detail2.*?><b>(.*?)"//4 omschrijving
-				+ "</b></td></tr><tr><th class='detail1.*?>Afspraaktijd: </th><td class='detail2.*?>(.*?)"//5 afspraaktijd
-				+ "</td></tr><tr><th class='detail1.*?>Internetverbinding: </th><td class='detail2.*?>(.*?)"//6 internetverbinding
-				+ "</td></tr><tr><th class='detail1.*?>Voorkeur: </th><td class='detail2.*?><b>(.*?)"//7 Voorkeur
-				+ "</b></td></tr><Th class='detail1.*?>Lead owner</Th><TD class='detail2.*?>(.*?)"//8 Lead owner
-				+ "</TD></TR><tr><td class=\"detail1.*?>Klant: </td><td class=\"detail2.*?>(.*?)  in ([\\d+]*?) <b>(.*?)</b>, klantnr. (.*?)" //9 10 11 12 straat, postcode, stad, klantnr.
-				+ "<br>Gemiddelde feedback Score: (.*?)" // 13 feedbackscore
-				+ "/10<br>.*?Status opdracht"
+				"<.. .[^>]*>Gepost op: </..><.. [^>]*>(.*?)"//1 gepost op
+				+ "</..></..><..><.. [^>]*>Kenmerken: </..><.. [^>]*>(.*?)"//2 OS
+				+ "</..><.. [^>]*>(.*?)"  //3 hoeveelste categorie
+				+ "</..><..><.. [^>]*>Omschrijving: </..><td.*?><b>(.*?)"//4 omschrijving
+				+ "</b></..></..><..><.. [^>]*>Afspraaktijd: </..><.. [^>]*>(.*?)"//5 afspraaktijd
+				+ "</..></..><..><.. [^>]*>Internetverbinding: </..><.. [^>]*>(.*?)"//6 internetverbinding
+				+ "</..></..><..><.. [^>]*>Voorkeur: </..><.. [^>]*><b>(.*?)"//7 Voorkeur
+				+ "</b></..></..><.. [^>]*>Lead owner</..><.. [^>]*>(.*?)"//8 Lead owner
+				+ "</..></..><..><.. [^>]*>Klant: </..><.. [^>]*>(.*?) in ([\\d+]*?) <b>(.*?)</b>"
+				+", klantnr. ([\\d]*(?:<..>Lidkaart serienummer [\\d]*)?)(?:<..>Btw nr.: [^<]*)?" //9 10 11 12 straat, postcode, stad, klantnr.
+				+ "(?:.*<..>(?:<strong>)?Gemiddelde feedback Score: (.*)" // 13 feedbackscore
+				+ "/10.*?Status opdracht"
 				+"(.*?)"
- 				+"<h2 align='center'>Je hebt <b>([^<]*?)"
- 				+"</b> opdrachten.</h2>"
+ 				+"<h2 align='center'>Je hebt <.>([^<]*?)"
+ 				+"</.> opdrachten.</..>)?"
 				;
-//		<th class='detail1'>Gepost op: </th><td class='detail2' colspan='2'>Zaterdag 13-06-2015 om 10:17:39</td></tr><tr><th class='detail1'>Kenmerken: </th><td class='detail2'>Windows 8
-//				</td><td class='detail2'>1e categorie
-//				</td><tr><th class='detail1'>Omschrijving: </th><td class='detail2' colspan='2'><b>Krijgt steeds melding facebook subscribe en wenst dit te verwijderen</b>
-//				</td></tr><tr><th class='detail1'>Afspraaktijd: </th><td class='detail2' colspan='2'>Blijft hetzelfde
-//				</td></tr><tr><th class='detail1'>Internetverbinding: </th><td class='detail2' colspan='2'>Belgacom
-//				</td></tr><tr><th class='detail1'>Voorkeur: </th><td class='detail2' colspan='2'><b>Niemand</b>
-//				</td></tr><Th class='detail1'>Lead owner</Th><TD class='detail2' colspan=2>Compudoc
-//				</td></TR><tr><td class="detail1">Klant:
-//				</td><td class="detail2" colspan="2" >Rue de Louvain   in 1315 <b>Pietrebais Incourt</b>, klantnr. 19385
-//				<br>Gemiddelde feedback Score: 0.00/10<br>
-//				<h2 align='center'>Nog geen bod geplaatst.
-// 				</h2><h2 align='center'>Je hebt <b>
-// 				</b> opdrachten.</h2>
+		/**
+
+		/**
+		 <.. [^>]*>Gepost op: </..><.. [^>]*>Zaterdag 13-06-2015 om 10:17:39</..></..>
+		 <..><.. [^>]*>Kenmerken: </..><.. [^>]*>Windows 8</..><.. [^>]*>1e categorie
+		 </..><..><.. [^>]*>Omschrijving: </..><.. [^>]*><b>Krijgt steeds melding facebook subscribe en wenst dit te verwijderen</b>
+		 </..></..><..><.. [^>]*>Afspraaktijd: </..><.. [^>]*>Blijft hetzelfde
+		 </..></..><..><.. [^>]*>Internetverbinding: </..><.. [^>]*>Belgacom
+		 </..></..><..><.. [^>]*>Voorkeur: </..><.. [^>]*><b>Niemand</b>
+		 </..></..><.. [^>]*>Lead owner</..><.. [^>]*>Compudoc
+		 </..></..><..><.. [^>]*>Klant:
+		 </..><.. [^>]*>Rue de Louvain   in 1315 <b>Pietrebais Incourt</b>, klantnr. 19385
+		 <..>Gemiddelde feedback Score: 0.00/10<..>
+		 <.. [^>]*>Nog geen bod geplaatst.
+		 </..><h2 align='center'>Je hebt <b>
+		 </b> opdrachten.</..>
+		 **/
+
+
+
+		//Opdracht waarbij bieden afgelopen is:
+		/**
+		 <.. [^>]*>Gepost op: </..><.. [^>]*>Maandag 29-06-2015 om 09:45:21</..></..>
+		 <..><.. [^>]*>Kenmerken: </..><.. [^>]*>Onbekend</..><.. [^>]*>1e categorie</..>
+		 <..><.. [^>]*>Omschrijving: </..><.. [^>]*><b>Het systeem...<.. [^>]*>blabla</b></..></..>
+		 <..><.. [^>]*>Afspraaktijd: </..><.. [^>]*>Liefst tijdens kantooruren</..></..>
+		 <..><.. [^>]*>Internetverbinding: </..><.. [^>]*>Belgacom</..></..>
+		 <..><.. [^>]*>Voorkeur: </..><.. [^>]*><b>Niemand</b></..></..>
+		 <.. [^>]*>Lead owner</..><.. [^>]*>Compudoc</..></..><..>
+		 <.. [^>]*>Klant: </..><.. [^>]*>Heidelaan  in 3001 <b>Heverlee</b>, klantnr. 369<..>Gemiddelde feedback Score: 10.00/10
+		 <..><strong><a href='javascr.....'>Commentaren</a></strong>
+		 <..><span id="comments" class="hiding"><span class='comment'><..><..><..><small>Op 2013-01-04 door lid nr 245 mbt opdracht 43706</small></..></span></span></..></..>
+		 <..><.. [^>]*>Gestart op: </..><.. [^>]*>Maandag 2015-06-29 om 16:01:02</..></..>
+		 <..><.. [^>]*>Bod: </..><.. [^>]*><b>10 NC door Bert, nr. 187</b></..></..>
+		 <..><.. [^>]*>Resterende tijd: </..><.. [^>]*>5 dagen, 23 u , 58  min , en 35  sec</..></table>
+		 <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-bottom:15px;">
+		 <..>
+		 </..>
+		 <.. [^>]*> <..>Status opdracht</..></..>
+		 <td width="11" style="padding-right:25px">
+		 </..>
+		 </..></table><div id='page-title' class='hideLine'><div id='bolded-line'></div></div><h2 align='center'>Je hebt <b>2 / 18</b> opdrachten.</..><h2 align='center'>Bieden afgelopen ! Opdracht gaat naar Bert, nr. 187</..>
+		 **/
+
+
 		Pattern r = Pattern.compile(pattern);
 		
 		// Now create matcher object.
 		Matcher m = r.matcher(fullPage);
-		int j=0;
+		int i=0;
 		Log.d("","Started matching");
-		while (m.find()) {
-			j++;
-			for(int i=1;i<=m.groupCount();i++){
-			 allProperties[i-1]=m.group(i);
-				if(i==4) {
-					allProperties[i - 1] = allProperties[i - 1].replaceAll("(< ?[Bb][Rr] ?>|< ?[Bb][Rr] ?/>)", "\n"); //we vervangen alle <br> en </br> sequenties met een komma en spatie
-				}else{
-					allProperties[i - 1] = allProperties[i - 1].replaceAll("(< ?[Bb][Rr] ?>|< ?[Bb][Rr] ?/>)", ", "); //we vervangen alle <br> en </br> sequenties met een komma en spatie
-				}
-			System.out.println(i+": "+propertyNames[i-1]+": " +allProperties[i-1]);
+		if (m.find()){
+			int count=m.groupCount();
+			Log.d("","MATCHED:: " + m.group());
+			while(i<count){
+				System.out.println();
 
+			 allProperties[i]=m.group(i+1);
+				if(allProperties[i]==null){
+					allProperties[i]="(Not found)";
+				}
+				if(i==4) {
+					allProperties[i] = allProperties[i].replaceAll("(< ?[Bb][Rr] ?>|< ?[Bb][Rr] ?/>)", "\n"); //we vervangen alle <br> en </br> sequenties met een komma en spatie
+				}else{
+					allProperties[i] = allProperties[i].replaceAll("(< ?[Bb][Rr] ?>|< ?[Bb][Rr] ?/>)", ", "); //we vervangen alle <br> en </br> sequenties met een komma en spatie
+				}
+				Log.d("","MATCHED: " + i + ": " + propertyNames[i] + ": " + allProperties[i]);
+			i++;
 			}
 		}
+		Log.d("", "Finished detail matching, found nb: " + i);
+
+		while(i<allProperties.length){
+			allProperties[i]="(Not found)";
+			i++;
+		}
+
 		String huidigBod=getProperty("huidigbod");
 		huidigBod=huidigBod.replaceAll("</p[^>]*>","\n");
 		huidigBod=huidigBod.replaceAll("<[^>]*>","");
 		setProperty("huidigbod",huidigBod);
-		Log.d("", "Finished matching, found nb: " + j);
+
 
 
 	}
