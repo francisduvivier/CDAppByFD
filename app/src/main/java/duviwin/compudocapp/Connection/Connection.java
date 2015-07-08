@@ -2,10 +2,8 @@ package duviwin.compudocapp.Connection;
 
 import android.util.Log;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -15,10 +13,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 import duviwin.compudocapp.AppSettings;
-import duviwin.compudocapp.Events.EventSystem;
-import duviwin.compudocapp.Events.MyPublisher;
-import duviwin.compudocapp.OpdrList.OpdrListFragment;
-import duviwin.compudocapp.OpdrList.OpdrachtenInfo;
+import duviwin.compudocapp.events.EventSystem;
+import duviwin.compudocapp.events.MyPublisher;
+import duviwin.compudocapp.opdrList.OpdrListFragment;
 
 public class Connection implements Serializable,MyPublisher {
 	final int publisherId=0;

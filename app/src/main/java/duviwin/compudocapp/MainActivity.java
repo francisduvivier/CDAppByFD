@@ -21,8 +21,8 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import duviwin.compudocapp.Connection.Connection;
-import duviwin.compudocapp.Events.EventSystem;
-import duviwin.compudocapp.OpdrList.OpdrListFragment;
+import duviwin.compudocapp.events.EventSystem;
+import duviwin.compudocapp.opdrList.OpdrListFragment;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, OpdrListFragment.OnFragmentInteractionListener {
@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             newTab.setText(mSectionsPagerAdapter.getPageTitle(i))
                     .setTabListener(this);
             actionBar.addTab(newTab);
-        };
+        }
         SharedPreferences prefMgr= PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
         if(prefMgr.getString("userNameKey", "").equals("")){
