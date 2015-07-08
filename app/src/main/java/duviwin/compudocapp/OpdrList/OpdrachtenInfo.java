@@ -57,7 +57,7 @@ public class OpdrachtenInfo {
 			}else {
 				String[] valList=new String[infoTypeNames.length];
 				for(int i=0;i<infoTypeNames.length;i++){
-					valList[i]=m.group(i + 1);
+					valList[i]=m.group(i+1);
 				}
 				opdrachten.add(new Opdracht(valList));
 				Log.d("OpdrachtenInfo","\n" + m.group(0));

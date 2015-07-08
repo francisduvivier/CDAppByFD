@@ -8,14 +8,12 @@ import duviwin.compudocapp.R;
 public class OpdrListHtmlInfo
 {
     public static final String opdrListPattern=
-            "(?:<.. class=\"opdracht([^\"]*)" +
-            "[^>]*?\"><a.*?opdrachtnr=([\\d+]*)" +
-            "[^>]*?\">[\\d+]*?</a></td><td class=\"opdracht\"[^>]*?>(.*?)" +
-                    "</..><.. class=\"opdracht\"[^>]*?width=\"50%\"([^>]*?)>(.*?)" +
-                    "</..><.. class=\"opdracht\"[^>]*?\">(.*?)" +
-                    "NC.*?</..><.. class=\"opdracht\"[^>]*?>[<.>]*?([^<>]*)" +
-                    "[</.>]*?</..>|hoofding\" style=\"text-align:left;padding:10px\" colspan=\"5\">(Opdrachten( van <b>(.*?)" +
-                    "u en ouder)?))";
+            "(?:<.. class=\"opdracht([^\"]*)[^>]*?\"><a.*?opdrachtnr=([\\d+]*)[^>]*?\">[\\d+]*?</a></td>"
+                    + "<.. class=\"opdracht\"[^>]*?>(.*?)</td><td class=\"opdracht\"[^>]*?width=\"50%\"([^>]*?)>(.*?)</td>"
+                    + "<.. class=\"opdracht\"[^>]*?\">(.*?)NC.*?</td>"
+                    + "<.. class=\"opdracht\"[^>]*?>(?:<b>)?([^<>]*)(?:</b>)?</..>" +
+                    "|hoofding\" style=\"text-align:left;padding:10px\" colspan=\"5\">(Opdrachten( van <b>(.*?)u en ouder)?))";
+
     Nms num= Nms.opdrachtNr;
     int i=num.n;
     Nms[] tst= Nms.values();
@@ -27,7 +25,7 @@ public class OpdrListHtmlInfo
         plaats(2,R.id.opdracht_item_plaats),
         uitlegKleur(3,null),
         korteUitleg(4,R.id.opdracht_item_korteUitleg, new String[]{"<br />"}, new String[]{"\n"}),
-        huidigBod(5,R.id.opdracht_item_hBod,new String[]{"(.*)"},new String[]{"$1\"NC\""}),
+        huidigBod(5,R.id.opdracht_item_hBod,new String[]{"(\\d).*"},new String[]{"$1NC"}),
         tijdVoorBod(6,R.id.opdracht_item_tijdVoorBod, new String[]{"  sec","  min  en "," uur"}, new String[]{"s","m","u"});
         public final int n;
         public final String[] toFind;

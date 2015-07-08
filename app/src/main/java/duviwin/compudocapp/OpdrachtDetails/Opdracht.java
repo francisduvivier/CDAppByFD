@@ -51,7 +51,7 @@ public class Opdracht implements Serializable {
 				shrtInfo[enumVal.n]= shrtInfo[enumVal.n].replaceAll(enumVal.toFind[i], enumVal.toPut[i]);
 			}
 		}
-		Log.d("Opdracht","shrtInfo[Nms.isZelfst.n: "+shrtInfo[Nms.isZelfst.n]);
+		Log.d("Opdracht","shrtInfo[Nms.isZelfst.n]: "+shrtInfo[Nms.isZelfst.n]);
 		this.numberClr= CSSData.KLEUR_MAP.get(shrtInfo[Nms.isZelfst.n]);
 
 		if(shrtInfo[Nms.uitlegKleur.n].equals(" ")){
