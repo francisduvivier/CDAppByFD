@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.CSSData;
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.R;
@@ -73,7 +74,7 @@ public class Opdracht implements Serializable {
 	//Deze methode zorgt ervoor dat extra info over de opdracht opgehaald wordt via de opdrachtlink en dat die info dan hier in het object gezet wordt.
 	public void getExtraInfo(){
 		String opdrachtUrl = "http://www.compudoc.be/index.php?page=opdrachten/detail&opdrachtnr="
-//				+ opdrachtNr
+				+ shrtInfo[Nms.opdrachtNr.n]
 				;
 
 		String fullPage=Connection.getConnection().doGet(opdrachtUrl, "");
@@ -192,10 +193,10 @@ public class Opdracht implements Serializable {
 		return propertyIds[propertyNameList.indexOf(name)];
 	}
 	public String bodResult="";
-//	@Override
-//	public String toString(){
-//		return "opdracht nr: "+opdrachtNr+": "+plaats+": "+korteUitleg;
-//	}
+	@Override
+	public String toString(){
+		return "opdracht nr: "+shrtInfo[Nms.opdrachtNr.n]+": "+shrtInfo[Nms.plaats.n]+": "+shrtInfo[Nms.korteUitleg.n];
+	}
 	public void bied(final int bod, final int maxBod, final ShowDetailsActivity activity){
 		//todo work with the following data
 		//todo for open webpage
@@ -207,7 +208,7 @@ public class Opdracht implements Serializable {
 				@Override
 				protected String doInBackground(Void... params) {
 					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + shrtInfo[Nms.opdrachtNr.n] +
-//							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + opdrachtNr +
+							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + shrtInfo[Nms.opdrachtNr.n] +
 							"&max_bod=" + maxBod + "&submit_bod=Bieden%21");
 					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","`$1");
 					getExtraInfo();
