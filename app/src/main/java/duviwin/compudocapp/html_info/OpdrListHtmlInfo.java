@@ -18,6 +18,11 @@ public class OpdrListHtmlInfo
     int i=num.n;
     Nms[] tst= Nms.values();
 
+    public String getPattern() {
+        return opdrListPattern;
+    }
+
+
     public enum Nms {
 
         isZelfst(0,null)
@@ -25,7 +30,7 @@ public class OpdrListHtmlInfo
         plaats(2,R.id.opdracht_item_plaats),
         uitlegKleur(3,null),
         korteUitleg(4,R.id.opdracht_item_korteUitleg, new String[]{"<br />"}, new String[]{"\n"}),
-        huidigBod(5,R.id.opdracht_item_hBod,new String[]{"(\\d).*"},new String[]{"$1NC"}),
+        huidigBod(5,R.id.opdracht_item_hBod,new String[]{"(\\d++)[^\\d]*+"},new String[]{"$1NC"}),
         tijdVoorBod(6,R.id.opdracht_item_tijdVoorBod, new String[]{"  sec","  min  en "," uur"}, new String[]{"s","m","u"});
         public final int n;
         public final String[] toFind;

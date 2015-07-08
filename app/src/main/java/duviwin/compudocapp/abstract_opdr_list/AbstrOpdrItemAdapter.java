@@ -1,4 +1,4 @@
-package duviwin.compudocapp.OpdrList;
+package duviwin.compudocapp.abstract_opdr_list;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,13 +14,14 @@ import java.util.List;
 import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.OpdrListHtmlInfo.Nms;
+
 /**
  * Created by Duviwin on 6/15/2015.
  */
-public class OpdrItemAdapter extends ArrayAdapter {
+public abstract class AbstrOpdrItemAdapter extends ArrayAdapter {
     private LayoutInflater li;
 
-    public OpdrItemAdapter(Context context, int resId, List<Opdracht> opdrList) {
+    public AbstrOpdrItemAdapter(Context context, int resId, List<Opdracht> opdrList) {
         super(context, resId, opdrList);
         li = LayoutInflater.from(context);
 
