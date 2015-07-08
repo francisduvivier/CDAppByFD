@@ -1,5 +1,8 @@
 package duviwin.compudocapp.Connection;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.DataOutputStream;
@@ -39,9 +42,20 @@ public class Connection implements Serializable,MyPublisher {
 				"status=login&login_name=" + AppSettings.userName + "&login_password="
 						+ AppSettings.password + "&submit=Login");
 		isLoggedIn=result.contains("U bent nu ingelogd");
+		if(!isLoggedIn){
+			Log.v("Login","Login failed");
+		}
 		return result;
 	}
+	public static void refreshCredentials(Context cntxt){
+		SharedPreferences prefMgr= PreferenceManager
+				.getDefaultSharedPreferences(cntxt);
+		AppSettings.userName=prefMgr.getString("userNameKey", "");
+		AppSettings.password=prefMgr.getString("passwordKey", "");
 
+//		EventSystem.subscribe(Connection.getConnection().getPublisherId(), this );
+
+	}
 	public String doPost(String urlToRead, String params) {
 		String response = "";
 		try {
@@ -51,31 +65,38 @@ public class Connection implements Serializable,MyPublisher {
 		}
 		return response;
 	}
+	private String doHttpStuff(String method, String urlToRead, String params)throws  IOException{
 
-	private String doHttpStuff(String method, String urlToRead, String params)
-			throws IOException {
-		URL urlObj = new URL(urlToRead);
-		EventSystem.publish(getPublisherId(),"Opening Connection ");
+		try{return doHttpStuffHelp(method,urlToRead,params);}catch (NotLoggedInException nle){
+			Login();
+			return doHttpStuff(method,urlToRead,params);
+		}
+	}
 
-		HttpURLConnection httpCon = (HttpURLConnection) urlObj.openConnection();
-		EventSystem.publish(getPublisherId(),"DONE Opening Connection ");
+	private String doHttpStuffHelp(String method, String urlToRead, String params)
+			throws IOException, NotLoggedInException {
+			URL urlObj = new URL(urlToRead);
+			EventSystem.publish(getPublisherId(), "Opening Connection ");
 
-		httpCon.setRequestMethod(method);
+			HttpURLConnection httpCon = (HttpURLConnection) urlObj.openConnection();
+			EventSystem.publish(getPublisherId(), "DONE Opening Connection ");
 
-		httpCon.setRequestProperty("User-Agent", USER_AGENT);
-		httpCon.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-		httpCon.setRequestProperty("Cookie", getCurrCookies());
-		String urlParameters = params;
+			httpCon.setRequestMethod(method);
 
-		// Send post request
-		httpCon.setDoOutput(true);
-		EventSystem.publish(getPublisherId(),"DONE setDoOutput(true) ");
+			httpCon.setRequestProperty("User-Agent", USER_AGENT);
+			httpCon.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+			httpCon.setRequestProperty("Cookie", getCurrCookies());
+			String urlParameters = params;
 
-		DataOutputStream wr = new DataOutputStream(httpCon.getOutputStream());
-		wr.writeBytes(urlParameters);
-		wr.flush();
-		wr.close();
-		EventSystem.publish(getPublisherId(),"DONE writing data out) ");
+			// Send post request
+			httpCon.setDoOutput(true);
+			EventSystem.publish(getPublisherId(), "DONE setDoOutput(true) ");
+
+			DataOutputStream wr = new DataOutputStream(httpCon.getOutputStream());
+			wr.writeBytes(urlParameters);
+			wr.flush();
+			wr.close();
+			EventSystem.publish(getPublisherId(), "DONE writing data out) ");
 
 //		int responseCode = httpCon.getResponseCode();
 //		System.out.println("\nSending '" + method + "' request to URL : "
@@ -89,7 +110,7 @@ public class Connection implements Serializable,MyPublisher {
 //				httpCon.getInputStream()));
 //		httpCon.getResponseMessage();
 //		String inputLine;
-		StringBuilder response = new StringBuilder();
+			StringBuilder response = new StringBuilder();
 //		EventSystem.publish(getPublisherId(),"DONE setting bufferedReader");
 //
 //		while ((inputLine = in.readLine()) != null) {
@@ -98,19 +119,23 @@ public class Connection implements Serializable,MyPublisher {
 
 //		in.close();
 
-		Scanner scanner = new Scanner(httpCon.getInputStream(), "utf-8");
-		try {
-			while (scanner.hasNextLine()){
-				response.append(scanner.nextLine());
-			}
-		}
-		finally{
-			scanner.close();
-		}
-		EventSystem.publish(getPublisherId(),"DONE reading lines");
+			Scanner scanner = new Scanner(httpCon.getInputStream(), "utf-8");
+			try {
+				while (scanner.hasNextLine()) {
+					String nextLine = scanner.nextLine();
+					if (nextLine.contains("Je ben niet ingelogd.")) {
+						throw new NotLoggedInException("It seems your are not logged in anymore");
+					}
+					response.append(nextLine);
 
-		handleCookies(httpCon);
-		EventSystem.publish(getPublisherId(),"----------------DONE handling cookies-------------------");
+				}
+			} finally {
+				scanner.close();
+			}
+			EventSystem.publish(getPublisherId(), "DONE reading lines");
+
+			handleCookies(httpCon);
+			EventSystem.publish(getPublisherId(), "----------------DONE handling cookies-------------------");
 
 
 		return response.toString();
@@ -152,9 +177,6 @@ public class Connection implements Serializable,MyPublisher {
 		String response = "";
 		try {
 			response = doHttpStuff("GET", urlToRead, params);
-			if(response.contains("Je ben niet ingelogd.")){
-				Login();
-			}
 		} catch (IOException e) {
 			Log.v("Connection","connection failed");
 		}

@@ -7,9 +7,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
-
+import android.view.MenuItem;
 
 import duviwin.compudocapp.Connection.Connection;
 
@@ -127,7 +126,9 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     public void onStop(){
         super.onStop();
-        Connection.getConnection().opdrListFrgmt.refresh();
+        Connection.getConnection().refreshCredentials(getBaseContext());
+        Connection.getConnection().opdrListFrgmt.refreshList();
+
     }
     /**
      * This fragment shows general preferences only. It is used when the

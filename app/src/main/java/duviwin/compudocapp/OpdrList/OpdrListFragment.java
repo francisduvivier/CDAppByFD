@@ -2,10 +2,8 @@ package duviwin.compudocapp.OpdrList;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.Connection.Connection;
-import duviwin.compudocapp.Events.EventSystem;
 import duviwin.compudocapp.Events.MyEventListener;
 import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.OpdrachtDetails.ShowDetailsActivity;
@@ -85,18 +81,10 @@ public class OpdrListFragment extends Fragment implements AbsListView.OnItemClic
         opdrachten.add(Opdracht.getDummy("Loading..."));
         mAdapter = new OpdrItemAdapter(getActivity(),
                 R.layout.opdracht_item, opdrachten);
-        refresh();
+        Connection.refreshCredentials(getActivity().getBaseContext());
+        refreshList();
     }
-    public void refresh(){
-            SharedPreferences prefMgr= PreferenceManager
-                    .getDefaultSharedPreferences(getActivity().getBaseContext());
-            AppSettings.userName=prefMgr.getString("userNameKey", "");
-            AppSettings.password=prefMgr.getString("passwordKey", "");
 
-        EventSystem.subscribe(Connection.getConnection().getPublisherId(), this);
-        (new HttpAsyncTask()).execute(this);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -153,6 +141,10 @@ public class OpdrListFragment extends Fragment implements AbsListView.OnItemClic
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
+    }
+
+    public void refreshList() {
+        (new HttpAsyncTask()).execute(this);
     }
 
     /**

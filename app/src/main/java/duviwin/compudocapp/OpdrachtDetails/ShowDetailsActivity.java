@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.OpdrListHtmlInfo.Nms;
 
@@ -22,6 +23,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Connection.refreshCredentials(getBaseContext());
         setContentView(R.layout.activity_show_details);
         Intent intent=getIntent();
         opdracht=(Opdracht) intent.getSerializableExtra("opdracht");
