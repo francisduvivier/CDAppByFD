@@ -37,7 +37,9 @@ public class OpdrItemAdapter extends ArrayAdapter {
             view = li.inflate(R.layout.opdracht_item, null);
             final TextView[] tvs=new TextView[Nms.values().length];
             for(Nms enumVal:Nms.values()){
-                    tvs[enumVal.i] = ((TextView) view.findViewById(enumVal.resId));
+                if(enumVal.resId!=null){
+                    tvs[enumVal.n] = ((TextView) view.findViewById(enumVal.resId));
+                }
             }
 
             holder = new Holder(tvs);
@@ -47,21 +49,21 @@ public class OpdrItemAdapter extends ArrayAdapter {
 //        }
 
 
-        holder.tvs[Nms.opdrachtNr.i].setBackgroundColor(Color.parseColor(opdr.numberClr));
-        holder.tvs[Nms.plaats.i].setBackgroundColor(Color.parseColor(opdr.numberClr));
-        holder.tvs[Nms.korteUitleg.i].setBackgroundColor(Color.parseColor(opdr.uitlegClr));
+        holder.tvs[Nms.opdrachtNr.n].setBackgroundColor(Color.parseColor(opdr.numberClr));
+        holder.tvs[Nms.plaats.n].setBackgroundColor(Color.parseColor(opdr.numberClr));
+        holder.tvs[Nms.korteUitleg.n].setBackgroundColor(Color.parseColor(opdr.uitlegClr));
         for(Nms enumVal:Nms.values()){
             if(enumVal.resId!=null){
-                holder.tvs[enumVal.i].setText(opdr.shrtInfo[enumVal.i]);
+                holder.tvs[enumVal.n].setText(opdr.shrtInfo[enumVal.n]);
             }
         }
 
         if(opdr.isDummy){
-            holder.tvs[Nms.plaats.i].setHeight(0);
-            holder.tvs[Nms.opdrachtNr.i].setHeight(0);
-            holder.tvs[Nms.huidigBod.i].setHeight(0);
-            holder.tvs[Nms.tijdVoorBod.i].setHeight(0);
-            ((LinearLayout) holder.tvs[Nms.tijdVoorBod.i].getParent().getParent()).setBackgroundColor(Color.parseColor("#000000"));
+            holder.tvs[Nms.plaats.n].setHeight(0);
+            holder.tvs[Nms.opdrachtNr.n].setHeight(0);
+            holder.tvs[Nms.huidigBod.n].setHeight(0);
+            holder.tvs[Nms.tijdVoorBod.n].setHeight(0);
+            ((LinearLayout) holder.tvs[Nms.tijdVoorBod.n].getParent().getParent()).setBackgroundColor(Color.parseColor("#000000"));
         }
 
         return view;

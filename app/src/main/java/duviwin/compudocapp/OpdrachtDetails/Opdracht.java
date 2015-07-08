@@ -23,9 +23,9 @@ public class Opdracht implements Serializable {
 
 	public  boolean isDummy;
 	private Opdracht(String text){
-		this.shrtInfo[Nms.opdrachtNr.i]="";
-		this.shrtInfo[Nms.plaats.i]="";
-		this.shrtInfo[Nms.korteUitleg.i]=text;
+		this.shrtInfo[Nms.opdrachtNr.n]="";
+		this.shrtInfo[Nms.plaats.n]="";
+		this.shrtInfo[Nms.korteUitleg.n]=text;
 		this.SPOED=false;
 		this.isDummy=true;
 	}
@@ -44,19 +44,20 @@ public class Opdracht implements Serializable {
 	public Opdracht(String[] vals) {
 		this.isDummy=false;
 
-		this.shrtInfo =vals;
 		for(Nms enumVal:Nms.values()){
+			this.shrtInfo[enumVal.n]=vals[enumVal.n];
 			for(int i=0;i<enumVal.toFind.length;i++){
-				shrtInfo[i]= shrtInfo[i].replaceAll(enumVal.toFind[i],enumVal.toPut[i]);
+				shrtInfo[enumVal.n]= shrtInfo[enumVal.n].replaceAll(enumVal.toFind[i], enumVal.toPut[i]);
 			}
 		}
-		this.numberClr= CSSData.KLEUR_MAP.get(shrtInfo[Nms.isZelfst.i]);
+		Log.d("Opdracht","shrtInfo[Nms.isZelfst.n: "+shrtInfo[Nms.isZelfst.n]);
+		this.numberClr= CSSData.KLEUR_MAP.get(shrtInfo[Nms.isZelfst.n]);
 
-		if(shrtInfo[Nms.uitlegKleur.i].equals(" ")){
+		if(shrtInfo[Nms.uitlegKleur.n].equals(" ")){
 			SPOED=false;
 			klantIsLid=false;
 		}
-		else if(shrtInfo[Nms.uitlegKleur.i].equals(" style='background-color: #8EAFDD;color: white'")){
+		else if(shrtInfo[Nms.uitlegKleur.n].equals(" style='background-color: #8EAFDD;color: white'")){
 			SPOED=false;
 			klantIsLid=true;
 			this.uitlegClr="#8EAFDD";
@@ -205,7 +206,7 @@ public class Opdracht implements Serializable {
 		class BiedenTask extends AsyncTask<Void, Void, String> {
 				@Override
 				protected String doInBackground(Void... params) {
-					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + shrtInfo[Nms.opdrachtNr.i] +
+					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + shrtInfo[Nms.opdrachtNr.n] +
 //							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + opdrachtNr +
 							"&max_bod=" + maxBod + "&submit_bod=Bieden%21");
 					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","`$1");

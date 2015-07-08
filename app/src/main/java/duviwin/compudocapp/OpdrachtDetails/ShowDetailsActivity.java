@@ -30,7 +30,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
             String url=intent.getData().toString();
             opdracht=Opdracht.getDummy("test");
             opdracht.isDummy=false;
-            opdracht.shrtInfo[Nms.opdrachtNr.i]=url.replaceAll(".*opdrachtnr=([\\d]*).*","$1");
+            opdracht.shrtInfo[Nms.opdrachtNr.n]=url.replaceAll(".*opdrachtnr=([\\d]*).*","$1");
 
         }
 
