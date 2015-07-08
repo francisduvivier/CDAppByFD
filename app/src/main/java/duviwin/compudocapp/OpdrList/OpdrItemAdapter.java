@@ -49,9 +49,10 @@ public class OpdrItemAdapter extends ArrayAdapter {
 //        }
 
 
-        holder.tvs[Nms.opdrachtNr.n].setBackgroundColor(Color.parseColor(opdr.numberClr));
-        holder.tvs[Nms.plaats.n].setBackgroundColor(Color.parseColor(opdr.numberClr));
-        holder.tvs[Nms.korteUitleg.n].setBackgroundColor(Color.parseColor(opdr.uitlegClr));
+        ((LinearLayout) holder.tvs[Nms.opdrachtNr.n].getParent()).setBackgroundColor(Color.parseColor(opdr.numberClr));
+        ((LinearLayout) holder.tvs[Nms.korteUitleg.n].getParent()).setBackgroundColor(Color.parseColor(opdr.uitlegClr));
+
+        //this for loop fills in the textFields
         for(Nms enumVal:Nms.values()){
             if(enumVal.resId!=null){
                 holder.tvs[enumVal.n].setText(opdr.shrtInfo[enumVal.n]);
