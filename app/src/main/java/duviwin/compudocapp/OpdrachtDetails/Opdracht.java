@@ -9,26 +9,28 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.CSSData;
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.R;
+import duviwin.compudocapp.html_info.OpdrListHtmlInfo.Nms;
 
 public class Opdracht implements Serializable {
 	public static Opdracht getDummy(String text){
 		return new Opdracht(text);
 	}
+	public String[] shrtInfo =new String[Nms.values().length];
+	public static int[] shrtIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,R.id.det_feedbackscore,R.id.det_huidig_bod,R.id.det_opdr_stand};
 
 	public  boolean isDummy;
 	private Opdracht(String text){
-		this.opdrachtNr="";
-		this.plaats="";
-		this.korteUitleg=text;
+		this.shrtInfo[Nms.opdrachtNr.i]="";
+		this.shrtInfo[Nms.plaats.i]="";
+		this.shrtInfo[Nms.korteUitleg.i]=text;
 		this.SPOED=false;
 		this.isDummy=true;
 	}
 
-	public String opdrachtNr, huidigBod = "", tijdVoorBod = "", plaats, korteUitleg;
+//	public String opdrachtNr, huidigBod = "", tijdVoorBod = "", plaats, korteUitleg;
 	final boolean SPOED;
 	public String numberClr="#c8d2d7";
 	public String uitlegClr="#c8d2d7";
@@ -37,23 +39,24 @@ public class Opdracht implements Serializable {
 	public static String[] propertyNames={"gepost","OS","cat","omschrijving","afspraaktijd","internet","voorkeur","owner","straat","postcode","stad", "klantnr","feedbackscore","huidigbod","opdrstand"};
 	public static int[] propertyIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,R.id.det_feedbackscore,R.id.det_huidig_bod,R.id.det_opdr_stand};
 
-	public Opdracht(String opdrachtNr, String plaats, String korteUitleg,
-			String huidigBod, String tijdVoorBod, String opdrachtType,
-			String uitlegKleur) {
-		this.isDummy=false;
-		this.opdrachtNr=opdrachtNr;
-		this.plaats=plaats;
-		this.korteUitleg=korteUitleg;
-		this.huidigBod=huidigBod+"NC";
-		this.tijdVoorBod=tijdVoorBod.replace("  sec","s").replace("  min  en ","m").replace(" uur","u");
-		this.numberClr= CSSData.KLEUR_MAP.get(opdrachtType.replace("opdracht",""));
-		System.out.println("opdrachtType: "+opdrachtType+", with replace: "+opdrachtType.replace("opdracht","")+", numberClr: "+numberClr);
 
-		if(uitlegKleur.equals(" ")){
+
+	public Opdracht(String[] vals) {
+		this.isDummy=false;
+
+		this.shrtInfo =vals;
+		for(Nms enumVal:Nms.values()){
+			for(int i=0;i<enumVal.toFind.length;i++){
+				shrtInfo[i]= shrtInfo[i].replaceAll(enumVal.toFind[i],enumVal.toPut[i]);
+			}
+		}
+		this.numberClr= CSSData.KLEUR_MAP.get(shrtInfo[Nms.isZelfst.i]);
+
+		if(shrtInfo[Nms.uitlegKleur.i].equals(" ")){
 			SPOED=false;
 			klantIsLid=false;
 		}
-		else if(uitlegKleur.equals(" style='background-color: #8EAFDD;color: white'")){
+		else if(shrtInfo[Nms.uitlegKleur.i].equals(" style='background-color: #8EAFDD;color: white'")){
 			SPOED=false;
 			klantIsLid=true;
 			this.uitlegClr="#8EAFDD";
@@ -68,7 +71,9 @@ public class Opdracht implements Serializable {
 	
 	//Deze methode zorgt ervoor dat extra info over de opdracht opgehaald wordt via de opdrachtlink en dat die info dan hier in het object gezet wordt.
 	public void getExtraInfo(){
-		String opdrachtUrl = "http://www.compudoc.be/index.php?page=opdrachten/detail&opdrachtnr="+ opdrachtNr;
+		String opdrachtUrl = "http://www.compudoc.be/index.php?page=opdrachten/detail&opdrachtnr="
+//				+ opdrachtNr
+				;
 
 		String fullPage=Connection.getConnection().doGet(opdrachtUrl, "");
 		String pattern=
@@ -186,10 +191,10 @@ public class Opdracht implements Serializable {
 		return propertyIds[propertyNameList.indexOf(name)];
 	}
 	public String bodResult="";
-	@Override
-	public String toString(){
-		return "opdracht nr: "+opdrachtNr+": "+plaats+": "+korteUitleg;
-	}
+//	@Override
+//	public String toString(){
+//		return "opdracht nr: "+opdrachtNr+": "+plaats+": "+korteUitleg;
+//	}
 	public void bied(final int bod, final int maxBod, final ShowDetailsActivity activity){
 		//todo work with the following data
 		//todo for open webpage
@@ -200,8 +205,8 @@ public class Opdracht implements Serializable {
 		class BiedenTask extends AsyncTask<Void, Void, String> {
 				@Override
 				protected String doInBackground(Void... params) {
-					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + opdrachtNr +
-							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + opdrachtNr +
+					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + shrtInfo[Nms.opdrachtNr.i] +
+//							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + opdrachtNr +
 							"&max_bod=" + maxBod + "&submit_bod=Bieden%21");
 					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","`$1");
 					getExtraInfo();

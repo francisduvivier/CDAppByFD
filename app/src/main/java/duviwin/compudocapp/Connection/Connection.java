@@ -13,9 +13,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 import duviwin.compudocapp.AppSettings;
-import duviwin.compudocapp.events.EventSystem;
-import duviwin.compudocapp.events.MyPublisher;
-import duviwin.compudocapp.opdrList.OpdrListFragment;
+import duviwin.compudocapp.Events.EventSystem;
+import duviwin.compudocapp.Events.MyPublisher;
+import duviwin.compudocapp.OpdrList.OpdrListFragment;
 
 public class Connection implements Serializable,MyPublisher {
 	final int publisherId=0;

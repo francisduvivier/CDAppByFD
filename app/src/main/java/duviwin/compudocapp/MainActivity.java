@@ -21,8 +21,8 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import duviwin.compudocapp.Connection.Connection;
-import duviwin.compudocapp.events.EventSystem;
-import duviwin.compudocapp.opdrList.OpdrListFragment;
+import duviwin.compudocapp.Events.EventSystem;
+import duviwin.compudocapp.OpdrList.OpdrListFragment;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, OpdrListFragment.OnFragmentInteractionListener {

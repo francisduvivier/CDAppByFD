@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import duviwin.compudocapp.R;
+import duviwin.compudocapp.html_info.OpdrListHtmlInfo.Nms;
 
 
 public class ShowDetailsActivity extends ActionBarActivity {
@@ -29,7 +30,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
             String url=intent.getData().toString();
             opdracht=Opdracht.getDummy("test");
             opdracht.isDummy=false;
-            opdracht.opdrachtNr=url.replaceAll(".*opdrachtnr=([\\d]*).*","$1");
+            opdracht.shrtInfo[Nms.opdrachtNr.i]=url.replaceAll(".*opdrachtnr=([\\d]*).*","$1");
+
         }
 
         class GetExtraInfoTask extends AsyncTask<Object, Void, Opdracht> {

@@ -15,7 +15,7 @@ public class EventSystem {
     static Map<Integer, List<MyEventListener>> listenerMap=new HashMap<Integer, List<MyEventListener>>();
     static long prevTime=System.currentTimeMillis();
     public static void  publish(int publisherId, String msg){
-//        List<MyEventListener> listenerList= listenerMap.get(publisherId);
+//        List<MyEventListener> listenerList= listenerMap.shrtInfo(publisherId);
 //        if(listenerList!=null){
 //            for(MyEventListener l:listenerList){
 //
