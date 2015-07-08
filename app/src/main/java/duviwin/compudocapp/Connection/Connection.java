@@ -34,7 +34,7 @@ public class Connection implements Serializable,MyPublisher {
 		}
 		return currConnection;
 	}
-	public String Login() {
+	private String Login() {
 		String result=doPost("http://www.compudoc.be/index.php",
 				"status=login&login_name=" + AppSettings.userName + "&login_password="
 						+ AppSettings.password + "&submit=Login");
@@ -52,7 +52,7 @@ public class Connection implements Serializable,MyPublisher {
 		return response;
 	}
 
-	public String doHttpStuff(String method, String urlToRead, String params)
+	private String doHttpStuff(String method, String urlToRead, String params)
 			throws IOException {
 		URL urlObj = new URL(urlToRead);
 		EventSystem.publish(getPublisherId(),"Opening Connection ");
@@ -116,7 +116,7 @@ public class Connection implements Serializable,MyPublisher {
 		return response.toString();
 	}
 
-	public void handleCookies(HttpURLConnection authCon) {
+	private void handleCookies(HttpURLConnection authCon) {
 		// find the cookies in the response header from the first request
 		List<String> cookies = authCon.getHeaderFields().get("Set-Cookie");
 		if (cookies != null) {
@@ -134,7 +134,7 @@ public class Connection implements Serializable,MyPublisher {
 	}
 
 
-	public String getCurrCookies() {
+	private String getCurrCookies() {
 		String str = "";
 		for (String key : currentCookies.keySet()) {
 			if (!str.isEmpty()) {
@@ -146,11 +146,20 @@ public class Connection implements Serializable,MyPublisher {
 	}
 
 	public String doGet(String urlToRead, String params) {
+		if(!isLoggedIn){
+			Login();
+		}
 		String response = "";
 		try {
 			response = doHttpStuff("GET", urlToRead, params);
+			if(response.contains("Je ben niet ingelogd.")){
+				Login();
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.v("Connection","connection failed");
+		}
+		if(!isLoggedIn){
+			Log.v("Connection","Login seems to have failed");
 		}
 		Log.d("","GOT RESPONSE HTML: "+response);
 		return response;
