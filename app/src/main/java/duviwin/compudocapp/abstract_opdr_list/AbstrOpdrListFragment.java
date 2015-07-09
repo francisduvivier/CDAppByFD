@@ -17,11 +17,11 @@ import java.util.List;
 
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.Events.MyEventListener;
-import duviwin.compudocapp.OpdrList.OpdrItemAdapter;
-import duviwin.compudocapp.OpdrList.OpdrachtenInfo;
 import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.OpdrachtDetails.ShowDetailsActivity;
 import duviwin.compudocapp.R;
+import duviwin.compudocapp.html_info.HtmlInfo;
+import duviwin.compudocapp.open_opdrachten.OpdrachtenInfo;
 
 /**
  * A fragment representing a list of Items.
@@ -40,8 +40,8 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
         mAdapter.notifyDataSetChanged();
 
     }
-    private OnFragmentInteractionListener mListener;
-
+    protected OnFragmentInteractionListener mListener;
+   final protected HtmlInfo htmlInfo;
     /**
      * The fragment's ListView/GridView.
      */
@@ -50,8 +50,8 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private OpdrItemAdapter mAdapter;
-    LayoutInflater li;
+    protected AbstrOpdrItemAdapter mAdapter;
+    protected LayoutInflater li;
     public void fillAdapter(List<Opdracht> result){
 
 // mAdapter = new OpdrItemAdapter(getActivity(),R.layout.opdracht_item,result);
@@ -63,26 +63,22 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
 
 
     }
-//    public static AbstrOpdrListFragment newInstance() {
-//        AbstrOpdrListFragment fragment = new AbstrOpdrListFragment();
-//        return fragment;
-//    }
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AbstrOpdrListFragment() {
-
+    public AbstrOpdrListFragment(HtmlInfo htmlInfo) {
+        this.htmlInfo=htmlInfo;
     }
-    List<Opdracht> opdrachten=new ArrayList<Opdracht>();
+    protected List<Opdracht> opdrachten=new ArrayList<Opdracht>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        Connection.getConnection().opdrListFrgmt =this;
         opdrachten.add(Opdracht.getDummy("Loading..."));
-        mAdapter = new OpdrItemAdapter(getActivity(),
-                R.layout.opdracht_item, opdrachten);
+        mAdapter = createAdapter();
         Connection.refreshCredentials(getActivity().getBaseContext());
         refreshList();
     }
@@ -149,6 +145,9 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
         (new HttpAsyncTask()).execute(this);
     }
 
+    //this method is made so that the subclass can determine the adapter, it should only be called in onCreate;
+    protected abstract AbstrOpdrItemAdapter createAdapter();
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -168,7 +167,9 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
         @Override
         protected List<Opdracht> doInBackground(AbstrOpdrListFragment... fragments) {
             this.f=fragments[0];
-            return OpdrachtenInfo.getOpdrachtList();
+            OpdrachtenInfo oi=new OpdrachtenInfo();
+            oi.downloadOpdrachten();
+            return oi.opdrachten;
         }
         @Override
         protected void onPostExecute(List<Opdracht> result) {

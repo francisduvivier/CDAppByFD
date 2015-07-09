@@ -1,8 +1,14 @@
 package duviwin.compudocapp.mijn_gegevens;
 
-/**
- * Created by Duviwin on 7/8/2015.
- */
-public class OpdrachtenInfo  extends duviwin.compudocapp.OpdrList.OpdrachtenInfo{
+import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrachtenInfo;
 
+public class OpdrachtenInfo extends AbstrOpdrachtenInfo{
+
+	public OpdrachtenInfo(){
+		super(new OpdrListHtmlInfo());
+	}
+	@Override
+	public String getUrl() {
+		return "http://compudoc.be/index.php?page=login/mijn%20gegevens";
+	}
 }

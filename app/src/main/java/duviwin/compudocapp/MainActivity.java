@@ -22,7 +22,7 @@ import java.util.Locale;
 
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.Events.EventSystem;
-import duviwin.compudocapp.OpdrList.OpdrListFragment;
+import duviwin.compudocapp.open_opdrachten.OpdrListFragment;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, OpdrListFragment.OnFragmentInteractionListener {
@@ -152,7 +152,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
-                return OpdrListFragment.newInstance();
+                return new  OpdrListFragment();
             } else {
                 return PlaceholderFragment.newInstance(position);
             }

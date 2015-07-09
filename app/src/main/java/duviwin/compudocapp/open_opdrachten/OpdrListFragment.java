@@ -1,9 +1,8 @@
-package duviwin.compudocapp.mijn_gegevens;
+package duviwin.compudocapp.open_opdrachten;
 
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrItemAdapter;
 import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrListFragment;
-import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;
 
 /**
  * A fragment representing a list of Items.
