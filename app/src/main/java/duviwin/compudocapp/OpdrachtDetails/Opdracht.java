@@ -23,7 +23,6 @@ public class Opdracht implements Serializable {
 		return new Opdracht(text);
 	}
 	public String[] shrtInfo;
-	public static int[] shrtIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,R.id.det_feedbackscore,R.id.det_huidig_bod,R.id.det_opdr_stand};
 	final HtmlInfo htmlInfo;
 
 	public  boolean isDummy;
@@ -40,7 +39,7 @@ public class Opdracht implements Serializable {
 //	public String opdrachtNr, huidigBod = "", tijdVoorBod = "", plaats, korteUitleg;
 	final boolean SPOED;
 	public String numberClr="#c8d2d7";
-	public String uitlegClr="#c8d2d7";
+	public String uitlegClr="#ffffff";
 	boolean klantIsLid=false;
 	public String[] allProperties=new String[propertyNames.length];
 	public static String[] propertyNames={"gepost","OS","cat","omschrijving","afspraaktijd","internet","voorkeur","owner","straat","postcode","stad", "klantnr","feedbackscore","huidigbod","opdrstand"};
@@ -220,7 +219,7 @@ public class Opdracht implements Serializable {
 					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + shrtInfo[htmlInfo.getOpdrNrIndex()] +
 							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + shrtInfo[htmlInfo.getOpdrNrIndex()] +
 							"&max_bod=" + maxBod + "&submit_bod=Bieden%21");
-					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","`$1");
+					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","$1");
 					getExtraInfo();
 					return result;
 

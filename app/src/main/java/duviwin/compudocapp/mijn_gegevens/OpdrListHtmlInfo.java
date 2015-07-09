@@ -16,7 +16,7 @@ public class OpdrListHtmlInfo implements HtmlInfo
             "<td class=\"lid2\">(.*?)</td>" +
             "<td class=\"lid2\">(\\d*)</td>" +
             "<td class=\"lid2\">([^<]*)</td>" +
-            "<td class=\"lid2\" style=\"text-align:center;\">([^<]*)</td>" +
+            "<td class=\"lid2\"[^>]*>([^<]*)</td>" +
             "</tr>";
 
     /**<table [^>]*><..><.. [^>]*>Opdrachtnr</..><.. [^>]*>Omschrijving</..><.. [^>]*>Bod </..><.. [^>]*>Status </..><.. [^>]*>Resterende tijd</..></..>

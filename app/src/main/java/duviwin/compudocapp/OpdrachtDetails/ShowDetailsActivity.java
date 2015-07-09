@@ -15,11 +15,12 @@ import android.widget.TextView;
 
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.R;
-import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo.Nms;
 
 
 public class ShowDetailsActivity extends ActionBarActivity {
     Opdracht opdracht=null;
+    private boolean doorGebruikerGewonnen =false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +33,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
             String url=intent.getData().toString();
             opdracht=Opdracht.getDummy("test");
             opdracht.isDummy=false;
-            opdracht.shrtInfo[Nms.opdrachtNr.index]=url.replaceAll(".*opdrachtnr=([\\d]*).*","$1");
+            opdracht.shrtInfo[opdracht.htmlInfo.getOpdrNrIndex()]=url.replaceAll(".*opdrachtnr=([\\d]*).*","$1");
 
         }
 
@@ -61,9 +62,16 @@ public class ShowDetailsActivity extends ActionBarActivity {
             tv.setBackgroundColor(Color.parseColor(opdr.uitlegClr));
 
         }
+        ((TextView)  findViewById(opdr.getPropertyId("huidigbod"))).setText(opdr.getProperty("huidigbod").replace("&euro;", "€").replace(". ,",".").replace("\n ","\n"));
+
         findViewById(opdr.getPropertyId("gepost")).setBackgroundColor(Color.parseColor(opdr.numberClr));
-        findViewById(opdr.getPropertyId("omschrijving")).setBackgroundColor(Color.parseColor(opdr.uitlegClr));
         ((TextView) findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
+        if(opdr.getProperty("klant").contains("Telefoon")){
+            this.doorGebruikerGewonnen =true;
+
+        }
+
+
 
 
 
@@ -106,4 +114,13 @@ public class ShowDetailsActivity extends ActionBarActivity {
             startActivity(intent);
         }
     }
+//    public void openCaller(View view){
+//        String telnr=opdracht.getProperty("adres").replaceAll(".*Telefoon: ([^,/])*,.*","$1");
+//        Uri geoLocation=Uri.parse("http://maps.google.com/maps?daddr="+straat+", "+opdracht.getProperty("stad"));
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        intent.setData(geoLocation);
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+//            startActivity(intent);
+//        }
+//    }
 }
