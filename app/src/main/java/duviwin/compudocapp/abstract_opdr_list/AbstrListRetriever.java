@@ -10,13 +10,12 @@ import java.util.regex.Pattern;
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.html_info.HtmlInfo;
-import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;
 
-public abstract class AbstrOpdrachtenInfo {
+public abstract class AbstrListRetriever {
 	public List<Opdracht> opdrachten;
 
 	protected final HtmlInfo htmlInfo;
-	public AbstrOpdrachtenInfo(HtmlInfo htmlInfo) {
+	public AbstrListRetriever(HtmlInfo htmlInfo) {
 		this.htmlInfo=htmlInfo;
 		opdrachten = new ArrayList<Opdracht>();
 	}
@@ -24,8 +23,10 @@ public abstract class AbstrOpdrachtenInfo {
 	public void downloadOpdrachten() {
 		opdrachten.clear();
 		Matcher m=getPreparedMatcher();
+		Log.d("listRetrieverMatch", "Strarting trying to match");
 
 		while (m.find()) {
+				Log.d("listRetrieverMatch",""+m.group());
 				addOpdrachtFromMatch(m);
 		}
 	}
@@ -35,7 +36,7 @@ public abstract class AbstrOpdrachtenInfo {
 		for(int i=0;i<htmlInfo.getVals().length;i++){
             valList[i]=m.group(i+1);
         }
-		opdrachten.add(new Opdracht(valList));
+		opdrachten.add(new Opdracht(htmlInfo,valList));
 		Log.d("OpdrachtenInfo", "\n" + m.group(0));
 	}
 
@@ -47,8 +48,9 @@ public abstract class AbstrOpdrachtenInfo {
 				getUrl(), "");
 
 		String line = fullPage;
+		Log.d("listretriever","tried getting url: "+getUrl()+", resultString is of length: "+line.length());
 
-		String pattern = OpdrListHtmlInfo.opdrListPattern;
+		String pattern = htmlInfo.getPattern();
 
 
 		// Create a Pattern object
@@ -56,7 +58,6 @@ public abstract class AbstrOpdrachtenInfo {
 
 		// Now create matcher object.
 		Matcher m = r.matcher(line);
-		OpdrListHtmlInfo.Nms[] infoTypeNames = OpdrListHtmlInfo.Nms.values();
 		return m;
 	}
 }

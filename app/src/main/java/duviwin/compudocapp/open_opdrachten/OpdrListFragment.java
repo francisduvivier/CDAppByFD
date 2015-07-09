@@ -15,7 +15,7 @@ import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrListFragment;
  */
 public class OpdrListFragment extends AbstrOpdrListFragment {
     public OpdrListFragment(){
-        super(new OpdrListHtmlInfo());
+        super(R.layout.fragment_mijn_opdr,new ListRetriever(),new OpdrListHtmlInfo());
     }
     @Override
     protected AbstrOpdrItemAdapter createAdapter(){

@@ -5,11 +5,11 @@ import android.util.Log;
 import java.util.regex.Matcher;
 
 import duviwin.compudocapp.OpdrachtDetails.Opdracht;
-import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrachtenInfo;
+import duviwin.compudocapp.abstract_opdr_list.AbstrListRetriever;
 
-public class OpdrachtenInfo extends AbstrOpdrachtenInfo{
+public class ListRetriever extends AbstrListRetriever {
 
-	public OpdrachtenInfo(){
+	public ListRetriever(){
 		super(new OpdrListHtmlInfo());
 	}
 	@Override

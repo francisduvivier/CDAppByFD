@@ -13,18 +13,24 @@ import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.CSSData;
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.R;
+import duviwin.compudocapp.html_info.HtmlInfo;
+import duviwin.compudocapp.html_info.HtmlInfoEnum;
+import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;
 import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo.Nms;
 
 public class Opdracht implements Serializable {
 	public static Opdracht getDummy(String text){
 		return new Opdracht(text);
 	}
-	public String[] shrtInfo =new String[Nms.values().length];
+	public String[] shrtInfo;
 	public static int[] shrtIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,R.id.det_feedbackscore,R.id.det_huidig_bod,R.id.det_opdr_stand};
+	final HtmlInfo htmlInfo;
 
 	public  boolean isDummy;
 	private Opdracht(String text){
-		this.shrtInfo[Nms.opdrachtNr.index]="";
+		htmlInfo=new OpdrListHtmlInfo();
+		shrtInfo =new String[Nms.values().length];
+		this.shrtInfo[htmlInfo.getOpdrNrIndex()]="";
 		this.shrtInfo[Nms.plaats.index]="";
 		this.shrtInfo[Nms.korteUitleg.index]=text;
 		this.SPOED=false;
@@ -42,39 +48,43 @@ public class Opdracht implements Serializable {
 
 
 
-	public Opdracht(String[] vals) {
+	public Opdracht(HtmlInfo hi,String[] vals) {
+		this.htmlInfo=hi;
 		this.isDummy=false;
-
-		for(Nms enumVal:Nms.values()){
-			this.shrtInfo[enumVal.index]=vals[enumVal.index];
-			for(int i=0;i<enumVal.toFind.length;i++){
-				shrtInfo[enumVal.index]= shrtInfo[enumVal.index].replaceAll(enumVal.toFind[i], enumVal.toPut[i]);
+		shrtInfo =new String[hi.getVals().length];
+		for(HtmlInfoEnum enumVal:hi.getVals()){
+			this.shrtInfo[enumVal.getIndex()]=vals[enumVal.getIndex()];
+			for(int i=0;i<enumVal.getToFind().length;i++){
+				shrtInfo[enumVal.getIndex()]= shrtInfo[enumVal.getIndex()].replaceAll(enumVal.getToFind()[i], enumVal.getToPut()[i]);
 			}
 		}
-		Log.d("Opdracht","shrtInfo[Nms.isZelfst.index]: "+shrtInfo[Nms.isZelfst.index]);
-		this.numberClr= CSSData.KLEUR_MAP.get(shrtInfo[Nms.isZelfst.index]);
 
-		if(shrtInfo[Nms.uitlegKleur.index].equals(" ")){
-			SPOED=false;
-			klantIsLid=false;
-		}
-		else if(shrtInfo[Nms.uitlegKleur.index].equals(" style='background-color: #8EAFDD;color: white'")){
-			SPOED=false;
-			klantIsLid=true;
-			this.uitlegClr="#8EAFDD";
+		if(hi.getClass().equals(OpdrListHtmlInfo.class)) {
+			Log.d("Opdracht", "shrtInfo[Nms.isZelfst.index]: " + shrtInfo[Nms.isZelfst.index]);
+			this.numberClr = CSSData.KLEUR_MAP.get(shrtInfo[Nms.isZelfst.index]);
+
+			if (shrtInfo[Nms.uitlegKleur.index].equals(" ")) {
+				SPOED = false;
+				klantIsLid = false;
+			} else if (shrtInfo[Nms.uitlegKleur.index].equals(" style='background-color: #8EAFDD;color: white'")) {
+				SPOED = false;
+				klantIsLid = true;
+				this.uitlegClr = "#8EAFDD";
+			} else {
+				SPOED = true;
+				klantIsLid = false;//this is actually unknown then
+				this.numberClr = CSSData.KLEUR_MAP.get("_spoed");
+			}
 		}
 		else{
-			SPOED=true;
-			klantIsLid=false;//this is actually unknown then
-			this.numberClr=CSSData.KLEUR_MAP.get("_spoed");
+			SPOED=false;
 		}
-
 		}
 	
 	//Deze methode zorgt ervoor dat extra info over de opdracht opgehaald wordt via de opdrachtlink en dat die info dan hier in het object gezet wordt.
 	public void getExtraInfo(){
 		String opdrachtUrl = "http://www.compudoc.be/index.php?page=opdrachten/detail&opdrachtnr="
-				+ shrtInfo[Nms.opdrachtNr.index]
+				+ shrtInfo[htmlInfo.getOpdrNrIndex()]
 				;
 
 		String fullPage=Connection.getConnection().doGet(opdrachtUrl, "");
@@ -195,7 +205,7 @@ public class Opdracht implements Serializable {
 	public String bodResult="";
 	@Override
 	public String toString(){
-		return "opdracht nr: "+shrtInfo[Nms.opdrachtNr.index]+": "+shrtInfo[Nms.plaats.index]+": "+shrtInfo[Nms.korteUitleg.index];
+		return "opdracht nr: "+shrtInfo[htmlInfo.getOpdrNrIndex()]+": "+shrtInfo[Nms.plaats.index]+": "+shrtInfo[Nms.korteUitleg.index];
 	}
 	public void bied(final int bod, final int maxBod, final ShowDetailsActivity activity){
 		//todo work with the following data
@@ -207,8 +217,8 @@ public class Opdracht implements Serializable {
 		class BiedenTask extends AsyncTask<Void, Void, String> {
 				@Override
 				protected String doInBackground(Void... params) {
-					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + shrtInfo[Nms.opdrachtNr.index] +
-							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + shrtInfo[Nms.opdrachtNr.index] +
+					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + shrtInfo[htmlInfo.getOpdrNrIndex()] +
+							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + shrtInfo[htmlInfo.getOpdrNrIndex()] +
 							"&max_bod=" + maxBod + "&submit_bod=Bieden%21");
 					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","`$1");
 					getExtraInfo();

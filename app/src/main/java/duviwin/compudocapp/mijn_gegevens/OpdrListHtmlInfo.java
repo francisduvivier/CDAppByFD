@@ -10,13 +10,24 @@ import duviwin.compudocapp.html_info.HtmlInfoEnum;
 public class OpdrListHtmlInfo implements HtmlInfo
 {
     public static final String opdrListPattern=
-            "(?:<.. class=\"opdracht([^\"]*)[^>]*?\"><a.*?opdrachtnr=([\\d+]*)[^>]*?\">[\\d+]*?</a></td>"
-                    + "<.. class=\"opdracht\"[^>]*?>(.*?)</td><td class=\"opdracht\"[^>]*?width=\"50%\"([^>]*?)>(.*?)</td>"
-                    + "<.. class=\"opdracht\"[^>]*?\">(.*?)NC.*?</td>"
-                    + "<.. class=\"opdracht\"[^>]*?>(?:<b>)?([^<>]*)(?:</b>)?</..>" +
-                    "|hoofding\" style=\"text-align:left;padding:10px\" colspan=\"5\">(Opdrachten( van <b>(.*?)u en ouder)?))";
+//            "(.*)";
+            "<tr>" +
+            "<td class=\"lid2\"><a href=[^>]*>(\\d*)</a></td>" +
+            "<td class=\"lid2\">(.*?)</td>" +
+            "<td class=\"lid2\">(\\d*)</td>" +
+            "<td class=\"lid2\">([^<]*)</td>" +
+            "<td class=\"lid2\" style=\"text-align:center;\">([^<]*)</td>" +
+            "</tr>";
 
-    Nms num= Nms.opdrachtNr;
+    /**<table [^>]*><..><.. [^>]*>Opdrachtnr</..><.. [^>]*>Omschrijving</..><.. [^>]*>Bod </..><.. [^>]*>Status </..><.. [^>]*>Resterende tijd</..></..>
+     * <tr>
+     *     <td class="lid2"><a href="index.php?page=opdrachten/detail&amp;opdrachtnr=52724">52724</a></td>
+     * <td class="lid2">Desktop start normaal op, geeft bureaublad netjes weer en na een\tijdje geeft die de melding No S</td>
+     * <td class="lid2">10</td>
+     * <td class="lid2">Lopend</td>
+     * <td class="lid2" style="text-align:center;">9 dagen, 7 u , 18  min , en 46  sec</td></tr></table>
+    **/
+     Nms num= Nms.opdrachtNr;
     int i=num.index;
     Nms[] tst= Nms.values();
 
@@ -27,18 +38,21 @@ public class OpdrListHtmlInfo implements HtmlInfo
     }
 
     @Override
+    public int getOpdrNrIndex() {
+        return Nms.opdrachtNr.index;
+    }
+
+    @Override
     public HtmlInfoEnum[] getVals(){
         return Nms.values();
     }
     public enum Nms implements HtmlInfoEnum {
-
-        isZelfst(0,null),
-        opdrachtNr(1, R.id.opdracht_item_opdrNr),
-        plaats(2,R.id.opdracht_item_plaats),
-        uitlegKleur(3,null),
-        korteUitleg(4,R.id.opdracht_item_korteUitleg, new String[]{"<br />"}, new String[]{"\n"}),
-        huidigBod(5,R.id.opdracht_item_hBod,new String[]{"(\\d++)[^\\d]*+"},new String[]{"$1NC"}),
-        tijdVoorBod(6,R.id.opdracht_item_tijdVoorBod, new String[]{"  sec","  min  en "," uur"}, new String[]{"s","m","u"});
+        //Opdrachtnr</..><.. [^>]*>Omschrijving</..><.. [^>]*>Bod </..><.. [^>]*>Status </..><.. [^>]*>Resterende tijd
+        opdrachtNr(0, R.id.opdracht_item_opdrNr),
+        korteUitleg(1,R.id.opdracht_item_korteUitleg, new String[]{"<br />"}, new String[]{"\n"}),
+        huidigBod(2,R.id.opdracht_item_hBod,new String[]{"(\\d++)[^\\d]*+"},new String[]{"$1NC"}),
+        status(3, R.id.opdracht_item_plaats),
+        tijdVoorBod(4,R.id.opdracht_item_tijdVoorBod, new String[]{" dagen, ","  sec","  min , en "," u , "}, new String[]{"d","s","m","u"});
         public final int index;
         public final String[] toFind;
         public final String[] toPut;

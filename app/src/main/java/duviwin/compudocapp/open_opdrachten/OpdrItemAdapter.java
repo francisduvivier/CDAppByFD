@@ -29,7 +29,13 @@ public class OpdrItemAdapter extends AbstrOpdrItemAdapter {
         Holder viewHolder=((Holder) view.getTag());
         ((LinearLayout) viewHolder.tvs[Nms.opdrachtNr.index].getParent()).setBackgroundColor(Color.parseColor(opdr.numberClr));
         ((LinearLayout) viewHolder.tvs[Nms.korteUitleg.index].getParent()).setBackgroundColor(Color.parseColor(opdr.uitlegClr));
-
+        if(opdr.isDummy){
+            viewHolder.tvs[OpdrListHtmlInfo.Nms.plaats.index].setHeight(0);
+            viewHolder.tvs[OpdrListHtmlInfo.Nms.opdrachtNr.index].setHeight(0);
+            viewHolder.tvs[OpdrListHtmlInfo.Nms.huidigBod.index].setHeight(0);
+            viewHolder.tvs[OpdrListHtmlInfo.Nms.tijdVoorBod.index].setHeight(0);
+            ((LinearLayout) viewHolder.tvs[OpdrListHtmlInfo.Nms.tijdVoorBod.index].getParent().getParent()).setBackgroundColor(Color.parseColor("#000000"));
+        }
         return view;
 
     }

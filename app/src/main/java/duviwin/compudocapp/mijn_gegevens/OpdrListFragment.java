@@ -3,7 +3,6 @@ package duviwin.compudocapp.mijn_gegevens;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrItemAdapter;
 import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrListFragment;
-import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;
 
 /**
  * A fragment representing a list of Items.
@@ -16,8 +15,9 @@ import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;
  */
 public class OpdrListFragment extends AbstrOpdrListFragment {
     public OpdrListFragment(){
-        super(new OpdrListHtmlInfo());
+        super(R.layout.fragment_mijn_opdr,new ListRetriever(),new OpdrListHtmlInfo());
     }
+
     @Override
     protected AbstrOpdrItemAdapter createAdapter(){
         return new OpdrItemAdapter(new OpdrListHtmlInfo(),getActivity(), R.layout.opdracht_item,opdrachten);

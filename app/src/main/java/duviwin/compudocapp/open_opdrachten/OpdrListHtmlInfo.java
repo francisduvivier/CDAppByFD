@@ -30,6 +30,12 @@ public class OpdrListHtmlInfo implements HtmlInfo
     public HtmlInfoEnum[] getVals(){
         return Nms.values();
     }
+
+    @Override
+    public int getOpdrNrIndex() {
+        return Nms.opdrachtNr.index;
+    }
+
     public enum Nms implements HtmlInfoEnum {
 
         isZelfst(0,null),

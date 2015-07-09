@@ -22,10 +22,11 @@ import java.util.Locale;
 
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.Events.EventSystem;
-import duviwin.compudocapp.open_opdrachten.OpdrListFragment;
 
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, OpdrListFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener
+//        , OpdrListFragment.OnFragmentInteractionListener
+{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -151,9 +152,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 0) {
-                return new  OpdrListFragment();
-            } else {
+            switch (position) {
+                case 0:
+                    return new duviwin.compudocapp.open_opdrachten.OpdrListFragment();
+                case 1:
+                    return new duviwin.compudocapp.mijn_gegevens.OpdrListFragment();
+            default:
                 return PlaceholderFragment.newInstance(position);
             }
         }
@@ -161,7 +165,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         @Override
         public int getCount() {
             // Show 1 total pages.
-            return 1;
+            return 2;
 //            return 4;
         }
 
@@ -171,12 +175,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             switch (position) {
                 case 0:
                     return getString(R.string.title_open).toUpperCase(l);
-//                case 1:
+                case 1:
 //                    return getString(R.string.title_factuur).toUpperCase(l);
 //                case 2:
 //                    return getString(R.string.title_afspraken).toUpperCase(l);
 //                case 3:
-//                    return getString(R.string.title_mijn).toUpperCase(l);
+                    return getString(R.string.title_mijn).toUpperCase(l);
             }
             return null;
         }

@@ -21,7 +21,6 @@ import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.OpdrachtDetails.ShowDetailsActivity;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
-import duviwin.compudocapp.open_opdrachten.OpdrachtenInfo;
 
 /**
  * A fragment representing a list of Items.
@@ -40,7 +39,9 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
         mAdapter.notifyDataSetChanged();
 
     }
-    protected OnFragmentInteractionListener mListener;
+    protected final int listResId;
+    protected final AbstrListRetriever opdrachtenInfo;
+    //    protected OnFragmentInteractionListener mListener;
    final protected HtmlInfo htmlInfo;
     /**
      * The fragment's ListView/GridView.
@@ -69,8 +70,10 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AbstrOpdrListFragment(HtmlInfo htmlInfo) {
+    public AbstrOpdrListFragment(int listResId,AbstrListRetriever oi, HtmlInfo htmlInfo) {
+        this.opdrachtenInfo=oi;
         this.htmlInfo=htmlInfo;
+        this.listResId = listResId;
     }
     protected List<Opdracht> opdrachten=new ArrayList<Opdracht>();
     @Override
@@ -89,9 +92,10 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
                              Bundle savedInstanceState) {
         //FDCODE
         li=inflater;
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        View view = inflater.inflate(listResId, container, false);
 
         // Set the adapter
+
         mListView = (AbsListView) view.findViewById(R.id.my_opdr_list);
         mListView.setAdapter(mAdapter);
 
@@ -104,23 +108,25 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        try {
+//            mListener = (OnFragmentInteractionListener) activity;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(activity.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+//        mListener = null;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener&&!opdrachten.get(position).isDummy) {
+        if (
+//                null != mListener&&
+                        !opdrachten.get(position).isDummy) {
            Intent intent=new Intent(getActivity(),ShowDetailsActivity.class);
             intent.putExtra("opdracht",opdrachten.get(position));
             startActivity(intent);
@@ -148,6 +154,10 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
     //this method is made so that the subclass can determine the adapter, it should only be called in onCreate;
     protected abstract AbstrOpdrItemAdapter createAdapter();
 
+    public AbstrListRetriever getOpdrInfo() {
+        return opdrachtenInfo;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -164,10 +174,11 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
     }
     private class HttpAsyncTask extends AsyncTask<AbstrOpdrListFragment, Void, List<Opdracht>> {
         private AbstrOpdrListFragment f;
+
         @Override
         protected List<Opdracht> doInBackground(AbstrOpdrListFragment... fragments) {
-            this.f=fragments[0];
-            OpdrachtenInfo oi=new OpdrachtenInfo();
+            this.f = fragments[0];
+            AbstrListRetriever oi = f.getOpdrInfo();
             oi.downloadOpdrachten();
             return oi.opdrachten;
         }

@@ -1,12 +1,10 @@
 package duviwin.compudocapp.abstract_opdr_list;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -15,7 +13,6 @@ import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.html_info.HtmlInfoEnum;
-import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;
 
 /**
  * Created by Duviwin on 6/15/2015.
@@ -56,13 +53,7 @@ public abstract class AbstrOpdrItemAdapter extends ArrayAdapter {
                 viewHolder.tvs[enumVal.getIndex()].setText(opdr.shrtInfo[enumVal.getIndex()]);
             }
         }
-        if(opdr.isDummy){
-            viewHolder.tvs[OpdrListHtmlInfo.Nms.plaats.index].setHeight(0);
-            viewHolder.tvs[OpdrListHtmlInfo.Nms.opdrachtNr.index].setHeight(0);
-            viewHolder.tvs[OpdrListHtmlInfo.Nms.huidigBod.index].setHeight(0);
-            viewHolder.tvs[OpdrListHtmlInfo.Nms.tijdVoorBod.index].setHeight(0);
-            ((LinearLayout) viewHolder.tvs[OpdrListHtmlInfo.Nms.tijdVoorBod.index].getParent().getParent()).setBackgroundColor(Color.parseColor("#000000"));
-        }
+
         return view;
 
     }
