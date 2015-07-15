@@ -66,7 +66,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
 
         findViewById(opdr.getPropertyId("gepost")).setBackgroundColor(Color.parseColor(opdr.numberClr));
         ((TextView) findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
-        if(opdr.getProperty("klant").contains("Telefoon")){
+        if(opdr.getProperty("straat").contains("Telefoon")){
             this.doorGebruikerGewonnen =true;
 
         }
