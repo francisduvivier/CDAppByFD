@@ -18,7 +18,6 @@ import java.util.Scanner;
 import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.Events.EventSystem;
 import duviwin.compudocapp.Events.MyPublisher;
-import duviwin.compudocapp.open_opdrachten.OpdrListFragment;
 
 public class Connection implements Serializable,MyPublisher {
 	final int publisherId=0;
@@ -29,7 +28,6 @@ public class Connection implements Serializable,MyPublisher {
 	public static final String USER_AGENT = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2";
 	public Map<String, String> currentCookies = new HashMap<String, String>();
 	public boolean isLoggedIn=false;
-	public OpdrListFragment opdrListFrgmt;
 	private static Connection currConnection;
 	public static Connection getConnection(){
 		if(currConnection==null){

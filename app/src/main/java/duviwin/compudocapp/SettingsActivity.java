@@ -127,8 +127,6 @@ public class SettingsActivity extends PreferenceActivity {
     public void onStop(){
         super.onStop();
         Connection.getConnection().refreshCredentials(getBaseContext());
-        Connection.getConnection().opdrListFrgmt.refreshList();
-
     }
     /**
      * This fragment shows general preferences only. It is used when the
