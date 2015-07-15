@@ -19,6 +19,7 @@
     <string name="fb_score">Feedback score:</string>
     <string name="det_huidig_bod">Huidig bod:</string>
     <string name="det_opdr_stand">Jouw opdrachtenstand:</string>
+    <string name="action_refresh">refresh</string>
 
 
 </resources>

@@ -114,14 +114,22 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent showSettings=new Intent(this,SettingsActivity.class);
-            startActivity(showSettings);
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                Intent showSettings = new Intent(this, SettingsActivity.class);
+                startActivity(showSettings);
+                return true;
+            case R.id.action_refresh:
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
