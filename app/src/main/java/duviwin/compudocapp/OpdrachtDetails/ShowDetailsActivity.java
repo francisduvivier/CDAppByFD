@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import duviwin.compudocapp.Connection.Connection;
@@ -20,6 +21,7 @@ import duviwin.compudocapp.R;
 public class ShowDetailsActivity extends ActionBarActivity {
     Opdracht opdracht=null;
     private boolean doorGebruikerGewonnen =false;
+    private boolean biedenAfgelopen =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +68,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
 
         findViewById(opdr.getPropertyId("gepost")).setBackgroundColor(Color.parseColor(opdr.numberClr));
         ((TextView) findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
-        if(opdr.getProperty("straat").contains("Telefoon")){
-            this.doorGebruikerGewonnen =true;
-
+        if(opdr.biedenIsAfgelopen()){
+        ((LinearLayout) findViewById(R.id.enkel_voor_open)).removeAllViews();
         }
 
 

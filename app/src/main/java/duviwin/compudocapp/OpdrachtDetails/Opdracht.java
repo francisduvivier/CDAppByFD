@@ -19,6 +19,7 @@ import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;
 import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo.Nms;
 
 public class Opdracht implements Serializable {
+
 	public static Opdracht getDummy(String text){
 		return new Opdracht(text);
 	}
@@ -161,17 +162,17 @@ public class Opdracht implements Serializable {
 			while(i<count){
 				System.out.println();
 
-			 allProperties[i]=m.group(i+1);
-				if(allProperties[i]==null){
-					allProperties[i]="(Not found)";
+				allProperties[i] = m.group(i + 1);
+				if (allProperties[i] == null) {
+					allProperties[i] = "(Not found)";
 				}
-				if(i==4) {
+				if (i == 4) {
 					allProperties[i] = allProperties[i].replaceAll("(< ?[Bb][Rr] ?>|< ?[Bb][Rr] ?/>)", "\n"); //we vervangen alle <br> en </br> sequenties met een komma en spatie
-				}else{
+				} else {
 					allProperties[i] = allProperties[i].replaceAll("(< ?[Bb][Rr] ?>|< ?[Bb][Rr] ?/>)", ", "); //we vervangen alle <br> en </br> sequenties met een komma en spatie
 				}
-				Log.d("","MATCHED: " + i + ": " + propertyNames[i] + ": " + allProperties[i]);
-			i++;
+				Log.d("", "MATCHED: " + i + ": " + propertyNames[i] + ": " + allProperties[i]);
+				i++;
 			}
 		}
 		Log.d("", "Finished detail matching, found nb: " + i);
@@ -205,6 +206,12 @@ public class Opdracht implements Serializable {
 	@Override
 	public String toString(){
 		return "opdracht nr: "+shrtInfo[htmlInfo.getOpdrNrIndex()]+": "+shrtInfo[Nms.plaats.index]+": "+shrtInfo[Nms.korteUitleg.index];
+	}
+	public boolean biedenIsAfgelopen(){
+		return getProperty("feedbackscore").equals("(Not found)");
+	}
+	public boolean isGewonnenDoorGebruiker(){
+		return getProperty("straat").contains("Telefoon:");
 	}
 	public void bied(final int bod, final int maxBod, final ShowDetailsActivity activity){
 		//todo work with the following data
