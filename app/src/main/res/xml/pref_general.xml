@@ -7,8 +7,7 @@
         android:key="userNameKey"
         android:title="@string/pref_title_display_name"
         android:selectAllOnFocus="true"
-        android:inputType="textCapWords"
-        android:capitalize="words"
+        android:inputType="number"
         android:singleLine="true"
         android:maxLines="1" />
     <EditTextPreference
@@ -16,11 +15,18 @@
         android:key="passwordKey"
         android:title="@string/pref_title_password"
         android:selectAllOnFocus="true"
-        android:inputType="textCapWords"
-        android:capitalize="words"
+        android:inputType="textPassword"
         android:singleLine="true"
         android:maxLines="1"
         android:password="true"/>
+
+    <EditTextPreference
+        android:key="defaultLocationKey"
+        android:title="@string/pref_title_def_loc"
+        android:selectAllOnFocus="true"
+        android:inputType="textCapWords"
+        android:summary="@string/route_start_summary"
+        />
 
 </PreferenceCategory>
 

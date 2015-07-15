@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import duviwin.compudocapp.Connection.Connection;
+import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.R;
 
 
@@ -27,7 +27,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Connection.refreshCredentials(getBaseContext());
+        AppSettings.refreshPrefs(getBaseContext());
         setContentView(R.layout.activity_show_details);
         Intent intent=getIntent();
         opdracht=(Opdracht) intent.getSerializableExtra("opdracht");
@@ -125,8 +125,13 @@ public class ShowDetailsActivity extends ActionBarActivity {
         opdracht.bied(minBod,maxBod, this);
     }
     public void openMaps(View view){
-        String straat=opdracht.getProperty("straat").replaceAll(".*Adres: ", "");
-        Uri geoLocation=Uri.parse("http://maps.google.com/maps?daddr=" + straat + ", " + opdracht.getProperty("stad"));
+        String straat=opdracht.getProperty("straat").replaceAll(".*Adres: ", "").replaceAll(" bus \\d*+","");
+        String destinationString=straat + ", "
+                + opdracht.getProperty("stad")+" "+opdracht.getProperty("postcode");
+        String startString= AppSettings.defaultLoc;
+
+            Uri geoLocation = Uri.parse("http://maps.google.com/maps?daddr=" + destinationString+"&saddr="+startString);
+
         launchActivity(geoLocation);
     }
 //

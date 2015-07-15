@@ -10,8 +10,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-import duviwin.compudocapp.Connection.Connection;
-
 import static duviwin.compudocapp.R.xml.pref_general;
 
 /**
@@ -126,7 +124,7 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     public void onStop(){
         super.onStop();
-        Connection.getConnection().refreshCredentials(getBaseContext());
+        AppSettings.refreshPrefs(getBaseContext());
     }
     /**
      * This fragment shows general preferences only. It is used when the

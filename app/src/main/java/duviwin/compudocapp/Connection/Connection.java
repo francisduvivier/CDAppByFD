@@ -1,8 +1,5 @@
 package duviwin.compudocapp.Connection;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.DataOutputStream;
@@ -45,15 +42,7 @@ public class Connection implements Serializable,MyPublisher {
 		}
 		return result;
 	}
-	public static void refreshCredentials(Context cntxt){
-		SharedPreferences prefMgr= PreferenceManager
-				.getDefaultSharedPreferences(cntxt);
-		AppSettings.userName=prefMgr.getString("userNameKey", "");
-		AppSettings.password=prefMgr.getString("passwordKey", "");
 
-//		EventSystem.subscribe(Connection.getConnection().getPublisherId(), this );
-
-	}
 	public String doPost(String urlToRead, String params) {
 		String response = "";
 		try {

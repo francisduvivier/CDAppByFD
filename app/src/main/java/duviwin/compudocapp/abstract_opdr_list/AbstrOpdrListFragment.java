@@ -1,8 +1,10 @@
 package duviwin.compudocapp.abstract_opdr_list;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,7 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import duviwin.compudocapp.Connection.Connection;
+import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.Events.MyEventListener;
 import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.OpdrachtDetails.ShowDetailsActivity;
@@ -82,11 +84,12 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
 //        Connection.getConnection().opdrListFrgmt =this;
         opdrachten.add(Opdracht.getDummy("Loading..."));
         mAdapter = createAdapter();
-        Connection.refreshCredentials(getActivity().getBaseContext());
+        AppSettings.refreshPrefs(getActivity().getBaseContext());
         refreshList();
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

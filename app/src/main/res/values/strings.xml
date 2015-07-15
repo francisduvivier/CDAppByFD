@@ -20,6 +20,8 @@
     <string name="det_huidig_bod">Huidig bod:</string>
     <string name="det_opdr_stand">Jouw opdrachtenstand:</string>
     <string name="action_refresh">refresh</string>
+    <string name="pref_title_def_loc">Start-locatie voor route-berekening</string>
+    <string name="route_start_summary">eg. Diestsesteenweg 423, Leuven, Laat leeg om route te laten berekenen van huidige locatie</string>
 
 
 </resources>
