@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +81,9 @@ public class ShowDetailsActivity extends ActionBarActivity {
                     TextView   callText=(TextView) callerFragmentView.findViewById(R.id.telnr);
                     callText.setText(telNr);
 
-                    //We set the tag of the parent to the telnr so that it can be used by the onclick in the Parent, see showDetailsActivity.bellen(...)
-//                    ((LinearLayout) callText.getParent()).setTag(telNr);
-//                    Log.d("CallClick", "set tel: "+telNr);
+//                    We set the tag of the parent to the telnr so that it can be used by the onclick in the Parent, see showDetailsActivity.bellen(...)
+                    ((LinearLayout) callText.getParent()).setTag(telNr);
+                    Log.d("CallClick", "set tel: "+telNr);
 
 
 
@@ -134,15 +135,15 @@ public class ShowDetailsActivity extends ActionBarActivity {
 
         launchActivity(geoLocation);
     }
-//
-//    public void bellen(View view) {
-//        String telnr=((String) view.getTag());
-//        Uri uri=Uri.parse("tel:"+telnr.replaceAll("[/ ]",""));
-//        Log.d("CallClick", "tel: "+telnr);
-//        Log.d("CallClick","uri: "+uri.toString());
-//        launchActivity(uri);
-//
-//    }
+
+    public void bellen(View view) {
+        String telnr=((String) view.getTag());
+        Uri uri=Uri.parse("tel:"+telnr.replaceAll("[/ ]",""));
+        Log.d("CallClick", "tel: "+telnr);
+        Log.d("CallClick", "uri: " + uri.toString());
+        launchActivity(uri);
+
+    }
 
     private void launchActivity(Uri uri) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
