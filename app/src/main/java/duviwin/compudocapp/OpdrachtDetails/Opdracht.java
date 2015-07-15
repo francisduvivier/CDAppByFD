@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,6 +20,7 @@ import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;
 import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo.Nms;
 
 public class Opdracht implements Serializable {
+
 
 	public static Opdracht getDummy(String text){
 		return new Opdracht(text);
@@ -241,5 +243,17 @@ public class Opdracht implements Serializable {
 		task.execute();
 
 	}
+
+	public List<String> getTelNrs() {
+		List<String> telNrs=new ArrayList<String>();
+		String pattern="\\d{3,7}[ /]*\\d\\d[ ]?\\d\\d[ ]?\\d\\d";
+		Pattern p=Pattern.compile(pattern);
+		//Het telefoonnummer staat momenteel in de tekst van de straat.
+		Matcher m=p.matcher(getProperty("straat"));
+		while(m.find()){
+			telNrs.add(m.group());
+		}
+		return telNrs;
 	}
+}
 

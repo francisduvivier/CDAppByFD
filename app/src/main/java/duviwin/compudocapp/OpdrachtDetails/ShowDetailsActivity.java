@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.List;
 
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.R;
@@ -70,6 +73,23 @@ public class ShowDetailsActivity extends ActionBarActivity {
         ((TextView) findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
         if(opdr.biedenIsAfgelopen()){
         ((LinearLayout) findViewById(R.id.enkel_voor_open)).removeAllViews();
+            if(opdr.isGewonnenDoorGebruiker()){
+                List<String> telNrs= opdr.getTelNrs();
+                for(String telNr:telNrs){
+                    LayoutInflater li=getLayoutInflater();
+                    View callerFragmentView=li.inflate(R.layout.fragment_caller,null);
+                    ((LinearLayout) findViewById(R.id.enkel_voor_open)).addView(callerFragmentView);
+                    TextView   callText=(TextView) callerFragmentView.findViewById(R.id.telnr);
+                    callText.setText(telNr);
+
+                    //We set the tag of the parent to the telnr so that it can be used by the onclick in the Parent, see showDetailsActivity.bellen(...)
+//                    ((LinearLayout) callText.getParent()).setTag(telNr);
+//                    Log.d("CallClick", "set tel: "+telNr);
+
+
+
+                }
+            }
         }
 
 
@@ -107,21 +127,26 @@ public class ShowDetailsActivity extends ActionBarActivity {
         opdracht.bied(minBod,maxBod, this);
     }
     public void openMaps(View view){
-        String straat=opdracht.getProperty("straat").replaceAll(".*Adres: ","");
-        Uri geoLocation=Uri.parse("http://maps.google.com/maps?daddr="+straat+", "+opdracht.getProperty("stad"));
+        String straat=opdracht.getProperty("straat").replaceAll(".*Adres: ", "");
+        Uri geoLocation=Uri.parse("http://maps.google.com/maps?daddr=" + straat + ", " + opdracht.getProperty("stad"));
+        launchActivity(geoLocation);
+    }
+//
+//    public void bellen(View view) {
+//        String telnr=((String) view.getTag());
+//        Uri uri=Uri.parse("tel:"+telnr.replaceAll("[/ ]",""));
+//        Log.d("CallClick", "tel: "+telnr);
+//        Log.d("CallClick","uri: "+uri.toString());
+//        launchActivity(uri);
+//
+//    }
+
+    private void launchActivity(Uri uri) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(geoLocation);
+        intent.setData(uri);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
     }
-//    public void openCaller(View view){
-//        String telnr=opdracht.getProperty("adres").replaceAll(".*Telefoon: ([^,/])*,.*","$1");
-//        Uri geoLocation=Uri.parse("http://maps.google.com/maps?daddr="+straat+", "+opdracht.getProperty("stad"));
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setData(geoLocation);
-//        if (intent.resolveActivity(getPackageManager()) != null) {
-//            startActivity(intent);
-//        }
-//    }
+
 }
