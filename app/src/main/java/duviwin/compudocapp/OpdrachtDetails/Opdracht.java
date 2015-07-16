@@ -45,7 +45,8 @@ public class Opdracht implements Serializable {
 	public String uitlegClr="#ffffff";
 	boolean klantIsLid=false;
 	public String[] allProperties=new String[propertyNames.length];
-	public static String[] propertyNames={"gepost","OS","cat","omschrijving","afspraaktijd","internet","voorkeur","owner","straat","postcode","stad", "klantnr","feedbackscore","huidigbod","opdrstand"};
+	public static String[] propertyNames={"gepost","OS","cat","omschrijving","afspraaktijd","internet","voorkeur","owner"
+			,"straat","postcode","stad", "klantnr","feedbackscore","huidigbod","opdrstand"};
 	public static int[] propertyIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,R.id.det_feedbackscore,R.id.det_huidig_bod,R.id.det_opdr_stand};
 	public String getProperty(String name){
 		List<String> propertyNameList=Arrays.asList(propertyNames);
@@ -210,7 +211,7 @@ public class Opdracht implements Serializable {
 		return "opdracht nr: "+shrtInfo[htmlInfo.getOpdrNrIndex()]+": "+shrtInfo[Nms.plaats.index]+": "+shrtInfo[Nms.korteUitleg.index];
 	}
 	public boolean biedenIsAfgelopen(){
-		return getProperty("feedbackscore").equals("(Not found)");
+		return getProperty("huidigbod").equals("(Not found)")||getProperty("huidigbod").replaceAll(" ","").isEmpty();
 	}
 	public boolean isGewonnenDoorGebruiker(){
 		return getProperty("straat").contains("Telefoon:");
