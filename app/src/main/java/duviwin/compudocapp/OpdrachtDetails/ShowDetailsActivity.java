@@ -59,16 +59,21 @@ public class ShowDetailsActivity extends ActionBarActivity {
     public void update(Opdracht opdr){
         int i=0;
         for (String prop : opdr.allProperties) {
-            TextView tv=((TextView) findViewById(Opdracht.propertyIds[i++]));
-            tv.setPadding(0,5,0,5);
-            tv.setText(prop);
-            ((ViewGroup.MarginLayoutParams) tv.getLayoutParams()).setMargins(0,5,0,5);
-            tv.setBackgroundColor(Color.parseColor(opdr.uitlegClr));
-
+            try {
+                TextView tv = ((TextView) findViewById(Opdracht.getPropertyId(i++)));
+                tv.setPadding(0, 5, 0, 5);
+                tv.setText(prop);
+                ((ViewGroup.MarginLayoutParams) tv.getLayoutParams()).setMargins(0, 5, 0, 5);
+                tv.setBackgroundColor(Color.parseColor(opdr.uitlegClr));
+            } catch (HasNoPropIdException e) {
+                //do nothing
+            }
         }
-        ((TextView)  findViewById(opdr.getPropertyId("huidigbod"))).setText(opdr.getProperty("huidigbod").replace("&euro;", "€").replace(". ,",".").replace("\n ","\n"));
 
-        findViewById(opdr.getPropertyId("gepost")).setBackgroundColor(Color.parseColor(opdr.numberClr));
+        try{
+        ((TextView)  findViewById(Opdracht.getPropertyId("huidigbod"))).setText(opdr.getProperty("huidigbod").replace("&euro;", "€").replace(". ,",".").replace("\n ","\n"));
+
+        findViewById(Opdracht.getPropertyId("gepost")).setBackgroundColor(Color.parseColor(opdr.numberClr));
         ((TextView) findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
         if(opdr.biedenIsAfgelopen()){
         ((LinearLayout) findViewById(R.id.enkel_voor_open)).removeAllViews();
@@ -89,6 +94,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
 
                 }
             }
+        }}catch (HasNoPropIdException e){
+            throw new RuntimeException(e.getMessage()+" ,getPropertyId(\"gepost\") or getPropertyId(\"huidigbod\") seems to have thrown a HasNoPropIdException, this is very weird.");
         }
 
 

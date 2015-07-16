@@ -46,8 +46,8 @@ public class Opdracht implements Serializable {
 	boolean klantIsLid=false;
 	public String[] allProperties=new String[propertyNames.length];
 	public static String[] propertyNames={"gepost","OS","cat","omschrijving","afspraaktijd","internet","voorkeur","owner"
-			,"straat","postcode","stad", "klantnr","feedbackscore","huidigbod","opdrstand"};
-	public static int[] propertyIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,R.id.det_feedbackscore,R.id.det_huidig_bod,R.id.det_opdr_stand};
+			,"straat","postcode","stad", "klantnr","optionalInfo","feedbackscore","huidigbod","opdrstand"};
+	private static int[] propertyIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,-1,R.id.det_feedbackscore,R.id.det_huidig_bod,R.id.det_opdr_stand};
 	public String getProperty(String name){
 		List<String> propertyNameList=Arrays.asList(propertyNames);
 		return allProperties[propertyNameList.indexOf(name)];
@@ -105,7 +105,7 @@ public class Opdracht implements Serializable {
 				+ "</b></..></..><.. [^>]*>Lead owner</..><.. [^>]*>(.*?)"//8 Lead owner
 				+ "</..></..><..><.. [^>]*>Klant: </..><.. [^>]*>(.*?) in ([\\d+]*?) <b>(.*?)</b>"
 				+", klantnr. ([\\d]*(?:<..>Lidkaart serienummer [\\d]*)?)(?:<..>Btw nr.: [^<]*)?" //9 10 11 12 straat, postcode, stad, klantnr.
-				+ "(?:.*<..>(?:<strong>)?Gemiddelde feedback Score: (.*)" // 13 feedbackscore
+				+ "(?:(.*)<..>(?:<strong>)?Gemiddelde feedback Score: (.*)" // 13 feedbackscore
 				+ "/10.*?Status opdracht"
 				+"(.*?)"
  				+"<h2 align='center'>Je hebt <.>([^<]*?)"
@@ -201,9 +201,20 @@ public class Opdracht implements Serializable {
 		List<String> propertyNameList=Arrays.asList(propertyNames);
 		allProperties[propertyNameList.indexOf(name)]=newVal;
 	}
-	public int getPropertyId(String name){
+	public static int getPropertyId(String name) throws HasNoPropIdException {
 		List<String> propertyNameList=Arrays.asList(propertyNames);
-		return propertyIds[propertyNameList.indexOf(name)];
+		int propId=propertyIds[propertyNameList.indexOf(name)];
+		if(propId==-1){
+			throw new HasNoPropIdException(name+"has no propertyId coupled to it");
+		}
+		return propId ;
+	}
+	public static int getPropertyId(int i) throws HasNoPropIdException {
+		int propId=propertyIds[i];
+		if(propId==-1){
+			throw new HasNoPropIdException(propertyNames[i]+ ", index="+i+" has no propertyId coupled to it");
+		}
+		return propId ;
 	}
 	public String bodResult="";
 	@Override
