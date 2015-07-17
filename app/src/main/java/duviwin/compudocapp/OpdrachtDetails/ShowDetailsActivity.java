@@ -75,6 +75,11 @@ public class ShowDetailsActivity extends ActionBarActivity {
             ((TextView) findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
             if (opdr.biedenIsAfgelopen()) {
                 ((LinearLayout) findViewById(R.id.enkel_voor_open)).removeAllViews();
+
+                addOptionalInfo();
+
+
+
                 if (opdr.isGewonnenDoorGebruiker()) {
                     List<String> telNrs = opdr.getTelNrs();
                     for (String telNr : telNrs) {
@@ -97,6 +102,18 @@ public class ShowDetailsActivity extends ActionBarActivity {
         }
 
 
+    }
+
+    private void addOptionalInfo() {
+        for(int i=0;i<opdracht.opInfoItem.length;i++){
+            LayoutInflater li = getLayoutInflater();
+            View opInfoView = li.inflate(R.layout.frament_optional_details, null);
+            ((LinearLayout) findViewById(R.id.enkel_voor_open)).addView(opInfoView);
+            TextView callText = (TextView) opInfoView.findViewById(R.id.optional_info_item);
+            callText.setText(opdracht.opInfoItem[i]);
+            TextView announcer = (TextView) opInfoView.findViewById(R.id.optional_info_text);
+            announcer.setText(DetailedOpdracht.optInfoNames[i]);
+        }
     }
 
     @Override

@@ -28,9 +28,9 @@ public class DetailedOpdracht implements Serializable {
 
 	public final int opdrNr;
 	public String[] allProperties=new String[propertyNames.length];
-	public static String[] propertyNames={"gepost","OS","cat","omschrijving","afspraaktijd","internet","voorkeur","owner"
-			,"straat","postcode","stad", "klantnr","optionalInfo","feedbackscore","huidigbod","opdrstand"};
-	private static int[] propertyIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,-1,R.id.det_feedbackscore,R.id.det_huidig_bod,R.id.det_opdr_stand};
+	public static final String[] propertyNames={"gepost","OS","cat","omschrijving","afspraaktijd","internet","voorkeur","owner"
+			,"straat","postcode","stad", "klantnr","feedbackscore","optionalInfo","huidigbod","opdrstand"};
+	private static final int[] propertyIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,R.id.det_feedbackscore,-1,R.id.det_huidig_bod,R.id.det_opdr_stand};
 	private boolean isSpoed=false;
 	private boolean foundZelfstTag=false;
 
@@ -43,7 +43,41 @@ public class DetailedOpdracht implements Serializable {
 		this.opdrNr=nr;
 	}
 
-	
+
+	public static final String[] optInfoNames = {"Gestart Op:", "Bod:"
+			,""
+	};
+	public String[] opInfoItem =new String[optInfoNames.length];
+
+	private void processOptionalInfo(){
+		String regex="<.. .[^>]*>Gestart op: </..><.. .[^>]*>([^<]*)</..></..>" +
+				"<..><.. .[^>]*>Bod: </..><.. .[^>]*><[Bb]>([^<]*)</[Bb]></..></..>"
+				+
+				"<..><.. .[^>]*>[^<]*</..><.. .[^>]*>([^<]*)</..>";
+		/*
+<tr><th class="detail1">Gestart op: </th><td class="detail2" colspan="2">Dinsdag 2015-07-14 om 10:48:02</td></tr>
+<tr><th class="detail1">Bod: </th><td class="detail2" colspan="2"><b>10 NC door David, nr. 193</b></td></tr>
+<tr><td class="detail1">Resterende tijd: </td><td class="detail2" colspan="2" style="text-align:center;">21 dagen, 6 u , 45  min , en 27  sec</td>
+		 */
+
+
+		Pattern p = Pattern.compile(regex);
+
+		// Now create matcher object.
+		Matcher m = p.matcher(getProperty("optionalInfo"));
+		Log.d("DetailedOpdracht","Started optional info matching");
+
+		if (m.find()){
+
+			for(int i=0;i<optInfoNames.length;i++){
+				opInfoItem[i]=m.group(i+1);
+				Log.d("DetailedOpdracht","OpInfo "+i+": "+ opInfoItem[i]);
+			}
+		}else{
+			Log.e("DetailedOpdracht","we did not find the optional info in the right format, this is not good");
+		}
+	}
+
 	//Deze methode zorgt ervoor dat extra info over de opdracht opgehaald wordt via de opdrachtlink en dat die info dan hier in het object gezet wordt.
 	public void getExtraInfo(){
 		String opdrachtUrl = "http://www.compudoc.be/index.php?page=opdrachten/detail&opdrachtnr="
@@ -62,11 +96,11 @@ public class DetailedOpdracht implements Serializable {
 				+ "</b></..></..><.. [^>]*>Lead owner</..><.. [^>]*>(.*?)"//8 Lead owner
 				+ "</..></..><..><.. [^>]*>Klant: </..><.. [^>]*>(.*?) in ([\\d+]*?) <b>(.*?)</b>"
 				+", klantnr. ([\\d]*(?:<..>Lidkaart serienummer [\\d]*)?(?:<..>Btw nr.: [^<]*)?+)" //9 10 11 12 straat, postcode, stad, klantnr.
-				+ "(?:(.*)<..>(?:<strong>)?Gemiddelde feedback Score: (.*)" // 13 feedbackscore
-				+ "/10.*?Status opdracht"
-				+"(.*?)"
+				+ "(?:.*Gemiddelde feedback Score:[ ]?+(.*)" // 13 feedbackscore
+				+ "/10(.*)?Status opdracht"
+				+"(?:(.*?)"
  				+"<h2 align='center'>Je hebt <.>([^<]*?)"
- 				+"</.> opdrachten.</..>)?"
+ 				+"</.> opdrachten.</..>)?+)?"
 				;
 		/**
 
@@ -153,6 +187,7 @@ public class DetailedOpdracht implements Serializable {
 			allProperties[i]="(Not found)";
 			i++;
 		}
+		processOptionalInfo();
 
 		String huidigBod=getProperty("huidigbod");
 		huidigBod=huidigBod.replaceAll("</p[^>]*>","\n");
@@ -188,7 +223,7 @@ public class DetailedOpdracht implements Serializable {
 		return "opdracht nr: "+this.opdrNr+": "+getProperty("stad")+": "+getProperty("omschrijving");
 	}
 	public boolean biedenIsAfgelopen(){
-		return getProperty("huidigbod").equals("(Not found)")||getProperty("huidigbod").replaceAll(" ","").isEmpty();
+		return opInfoItem[0]!=null||getProperty("huidigbod").equals("(Not found)");
 	}
 	public boolean isGewonnenDoorGebruiker(){
 		return getProperty("straat").contains("Telefoon:");
@@ -247,6 +282,8 @@ public class DetailedOpdracht implements Serializable {
 	public int getOmschrijvingKleur(){
 		if(isSpoedOpdr()){
 			return CSSData.getKleur("_spoed");
+		}else if(opInfoItem[2]!=null&&opInfoItem[2].contains("geannuleerd")){
+			return CSSData.getKleur("geannuleerd");
 		}
 		return Color.parseColor("white");
 	}
