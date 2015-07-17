@@ -4,8 +4,8 @@ import android.util.Log;
 
 import java.util.regex.Matcher;
 
-import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.abstract_opdr_list.AbstrListRetriever;
+import duviwin.compudocapp.abstract_opdr_list.ShortOpdracht;
 
 public class ListRetriever extends AbstrListRetriever {
 
@@ -26,7 +26,7 @@ public class ListRetriever extends AbstrListRetriever {
 				String text=m.group()
 						.replace("hoofding\" style=\"text-align:left;padding:10px\" colspan=\"5\">","" )
 						.replace("<b>","");
-				opdrachten.add(Opdracht.getDummy(text));
+				opdrachten.add(ShortOpdracht.getDummy(text));
 			}else {
 				addOpdrachtFromMatch(m);
 			}

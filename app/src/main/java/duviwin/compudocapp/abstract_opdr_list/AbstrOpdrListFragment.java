@@ -19,7 +19,6 @@ import java.util.List;
 
 import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.Events.MyEventListener;
-import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.OpdrachtDetails.ShowDetailsActivity;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
@@ -37,7 +36,7 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
 
     @Override
     public void handleMsg(String msg){
-        opdrachten.add(Opdracht.getDummy(msg));
+        opdrachten.add(ShortOpdracht.getDummy(msg));
         mAdapter.notifyDataSetChanged();
 
     }
@@ -55,7 +54,7 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
      */
     protected AbstrOpdrItemAdapter mAdapter;
     protected LayoutInflater li;
-    public void fillAdapter(List<Opdracht> result){
+    public void fillAdapter(List<ShortOpdracht> result){
 
 // mAdapter = new OpdrItemAdapter(getActivity(),R.layout.opdracht_item,result);
         opdrachten.clear();
@@ -77,12 +76,12 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
         this.htmlInfo=htmlInfo;
         this.listResId = listResId;
     }
-    protected List<Opdracht> opdrachten=new ArrayList<Opdracht>();
+    protected List<ShortOpdracht> opdrachten=new ArrayList<ShortOpdracht>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        Connection.getConnection().opdrListFrgmt =this;
-        opdrachten.add(Opdracht.getDummy("Loading..."));
+        opdrachten.add(ShortOpdracht.getDummy("Loading..."));
         mAdapter = createAdapter();
         AppSettings.refreshPrefs(getActivity().getBaseContext());
         refreshList();
@@ -131,7 +130,7 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
 //                null != mListener&&
                         !opdrachten.get(position).isDummy) {
            Intent intent=new Intent(getActivity(),ShowDetailsActivity.class);
-            intent.putExtra("opdracht",opdrachten.get(position));
+            intent.putExtra("opdracht",opdrachten.get(position).makeDetailedOpdr());
             startActivity(intent);
 
     }
@@ -175,18 +174,18 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
         // TODO: Update argument type and name
         void onFragmentInteraction(String id);
     }
-    private class HttpAsyncTask extends AsyncTask<AbstrOpdrListFragment, Void, List<Opdracht>> {
+    private class HttpAsyncTask extends AsyncTask<AbstrOpdrListFragment, Void, List<ShortOpdracht>> {
         private AbstrOpdrListFragment f;
 
         @Override
-        protected List<Opdracht> doInBackground(AbstrOpdrListFragment... fragments) {
+        protected List<ShortOpdracht> doInBackground(AbstrOpdrListFragment... fragments) {
             this.f = fragments[0];
             AbstrListRetriever oi = f.getOpdrInfo();
             oi.downloadOpdrachten();
             return oi.opdrachten;
         }
         @Override
-        protected void onPostExecute(List<Opdracht> result) {
+        protected void onPostExecute(List<ShortOpdracht> result) {
             f.fillAdapter(result);
         }
     }

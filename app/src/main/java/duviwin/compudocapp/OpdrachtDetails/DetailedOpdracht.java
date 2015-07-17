@@ -1,12 +1,16 @@
 package duviwin.compudocapp.OpdrachtDetails;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,83 +18,36 @@ import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.CSSData;
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.R;
-import duviwin.compudocapp.html_info.HtmlInfo;
-import duviwin.compudocapp.html_info.HtmlInfoEnum;
-import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;
-import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo.Nms;
 
-public class Opdracht implements Serializable {
+public class DetailedOpdracht implements Serializable {
 
 
-	public static Opdracht getDummy(String text){
-		return new Opdracht(text);
-	}
-	public String[] shrtInfo;
-	final HtmlInfo htmlInfo;
 
-	public  boolean isDummy;
-	private Opdracht(String text){
-		htmlInfo=new OpdrListHtmlInfo();
-		shrtInfo =new String[Nms.values().length];
-		this.shrtInfo[htmlInfo.getOpdrNrIndex()]="";
-		this.shrtInfo[Nms.plaats.index]="";
-		this.shrtInfo[Nms.korteUitleg.index]=text;
-		this.SPOED=false;
-		this.isDummy=true;
-	}
 
-//	public String opdrachtNr, huidigBod = "", tijdVoorBod = "", plaats, korteUitleg;
-	final boolean SPOED;
-	public String numberClr="#c8d2d7";
-	public String uitlegClr="#ffffff";
-	boolean klantIsLid=false;
+
+
+	public final int opdrNr;
 	public String[] allProperties=new String[propertyNames.length];
 	public static String[] propertyNames={"gepost","OS","cat","omschrijving","afspraaktijd","internet","voorkeur","owner"
 			,"straat","postcode","stad", "klantnr","optionalInfo","feedbackscore","huidigbod","opdrstand"};
 	private static int[] propertyIds={R.id.det_gepost,R.id.det_OS,R.id.det_cat,R.id.det_omschrijving,R.id.det_afspraaktijd,R.id.det_internet,R.id.det_voorkeur,R.id.det_owner,R.id.det_straat,R.id.det_postcode,R.id.det_stad,R.id.det_klantnr,-1,R.id.det_feedbackscore,R.id.det_huidig_bod,R.id.det_opdr_stand};
+	private boolean isSpoed=false;
+	private boolean foundZelfstTag=false;
+
 	public String getProperty(String name){
 		List<String> propertyNameList=Arrays.asList(propertyNames);
 		return allProperties[propertyNameList.indexOf(name)];
 	}
 
+	public DetailedOpdracht(int nr){
+		this.opdrNr=nr;
+	}
 
-	public Opdracht(HtmlInfo hi,String[] vals) {
-		this.htmlInfo=hi;
-		this.isDummy=false;
-		shrtInfo =new String[hi.getVals().length];
-		for(HtmlInfoEnum enumVal:hi.getVals()){
-			this.shrtInfo[enumVal.getIndex()]=vals[enumVal.getIndex()];
-			for(int i=0;i<enumVal.getToFind().length;i++){
-				shrtInfo[enumVal.getIndex()]= shrtInfo[enumVal.getIndex()].replaceAll(enumVal.getToFind()[i], enumVal.getToPut()[i]);
-			}
-		}
-
-		if(hi.getClass().equals(OpdrListHtmlInfo.class)) {
-			Log.d("Opdracht", "shrtInfo[Nms.isZelfst.index]: " + shrtInfo[Nms.isZelfst.index]);
-			this.numberClr = CSSData.KLEUR_MAP.get(shrtInfo[Nms.isZelfst.index]);
-
-			if (shrtInfo[Nms.uitlegKleur.index].equals(" ")) {
-				SPOED = false;
-				klantIsLid = false;
-			} else if (shrtInfo[Nms.uitlegKleur.index].equals(" style='background-color: #8EAFDD;color: white'")) {
-				SPOED = false;
-				klantIsLid = true;
-				this.uitlegClr = "#8EAFDD";
-			} else {
-				SPOED = true;
-				klantIsLid = false;//this is actually unknown then
-				this.numberClr = CSSData.KLEUR_MAP.get("_spoed");
-			}
-		}
-		else{
-			SPOED=false;
-		}
-		}
 	
 	//Deze methode zorgt ervoor dat extra info over de opdracht opgehaald wordt via de opdrachtlink en dat die info dan hier in het object gezet wordt.
 	public void getExtraInfo(){
 		String opdrachtUrl = "http://www.compudoc.be/index.php?page=opdrachten/detail&opdrachtnr="
-				+ shrtInfo[htmlInfo.getOpdrNrIndex()]
+				+ opdrNr
 				;
 
 		String fullPage=Connection.getConnection().doGet(opdrachtUrl, "");
@@ -104,7 +61,7 @@ public class Opdracht implements Serializable {
 				+ "</..></..><..><.. [^>]*>Voorkeur: </..><.. [^>]*><b>(.*?)"//7 Voorkeur
 				+ "</b></..></..><.. [^>]*>Lead owner</..><.. [^>]*>(.*?)"//8 Lead owner
 				+ "</..></..><..><.. [^>]*>Klant: </..><.. [^>]*>(.*?) in ([\\d+]*?) <b>(.*?)</b>"
-				+", klantnr. ([\\d]*(?:<..>Lidkaart serienummer [\\d]*)?)(?:<..>Btw nr.: [^<]*)?" //9 10 11 12 straat, postcode, stad, klantnr.
+				+", klantnr. ([\\d]*(?:<..>Lidkaart serienummer [\\d]*)?(?:<..>Btw nr.: [^<]*)?+)" //9 10 11 12 straat, postcode, stad, klantnr.
 				+ "(?:(.*)<..>(?:<strong>)?Gemiddelde feedback Score: (.*)" // 13 feedbackscore
 				+ "/10.*?Status opdracht"
 				+"(.*?)"
@@ -162,7 +119,16 @@ public class Opdracht implements Serializable {
 		Matcher m = r.matcher(fullPage);
 		int i=0;
 		Log.d("","Started matching");
+
 		if (m.find()){
+			if(m.group().contains("detail2_spoed")){
+				this.isSpoed=true;
+			}
+			if(m.group().contains("detail1_zelfst")){
+				this.foundZelfstTag=true;
+			}
+
+
 			int count=m.groupCount();
 			Log.d("","MATCHED:: " + m.group());
 			while(i<count){
@@ -172,7 +138,7 @@ public class Opdracht implements Serializable {
 				if (allProperties[i] == null) {
 					allProperties[i] = "(Not found)";
 				}
-				if (i == 4) {
+				else if (propertyNames[i]=="omschrijving") {
 					allProperties[i] = allProperties[i].replaceAll("(< ?[Bb][Rr] ?>|< ?[Bb][Rr] ?/>)", "\n"); //we vervangen alle <br> en </br> sequenties met een komma en spatie
 				} else {
 					allProperties[i] = allProperties[i].replaceAll("(< ?[Bb][Rr] ?>|< ?[Bb][Rr] ?/>)", ", "); //we vervangen alle <br> en </br> sequenties met een komma en spatie
@@ -219,7 +185,7 @@ public class Opdracht implements Serializable {
 	public String bodResult="";
 	@Override
 	public String toString(){
-		return "opdracht nr: "+shrtInfo[htmlInfo.getOpdrNrIndex()]+": "+shrtInfo[Nms.plaats.index]+": "+shrtInfo[Nms.korteUitleg.index];
+		return "opdracht nr: "+this.opdrNr+": "+getProperty("stad")+": "+getProperty("omschrijving");
 	}
 	public boolean biedenIsAfgelopen(){
 		return getProperty("huidigbod").equals("(Not found)")||getProperty("huidigbod").replaceAll(" ","").isEmpty();
@@ -237,8 +203,8 @@ public class Opdracht implements Serializable {
 		class BiedenTask extends AsyncTask<Void, Void, String> {
 				@Override
 				protected String doInBackground(Void... params) {
-					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + shrtInfo[htmlInfo.getOpdrNrIndex()] +
-							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + shrtInfo[htmlInfo.getOpdrNrIndex()] +
+					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + DetailedOpdracht.this.opdrNr +
+							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + DetailedOpdracht.this.opdrNr +
 							"&max_bod=" + maxBod + "&submit_bod=Bieden%21");
 					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","$1");
 					getExtraInfo();
@@ -247,8 +213,8 @@ public class Opdracht implements Serializable {
 				}
 				@Override
 				protected void onPostExecute(String result) {
-					Opdracht.this.bodResult=result;
-					activity.update(Opdracht.this);
+					DetailedOpdracht.this.bodResult=result;
+					activity.update(DetailedOpdracht.this);
 				}
 			}
 		BiedenTask task=new BiedenTask();
@@ -266,6 +232,86 @@ public class Opdracht implements Serializable {
 			telNrs.add(m.group());
 		}
 		return telNrs;
+	}
+
+	public int getKlantNrKleur() {
+		if(isZelfst()){
+			return CSSData.getKleur("_zelfst");
+		}
+		else if(klantIsLid()){
+			return CSSData.getKleur("lid");
+		}
+
+		return Color.parseColor("white");
+	}
+	public int getOmschrijvingKleur(){
+		if(isSpoedOpdr()){
+			return CSSData.getKleur("_spoed");
+		}
+		return Color.parseColor("white");
+	}
+	public int getAdresKleur() {
+		if(klantIsLid()){
+			return CSSData.getKleur("lid");
+		}
+		else if(isZelfst()){
+			return CSSData.getKleur("_zelfst");
+		}
+		return Color.parseColor("white");
+	}
+
+	private boolean klantIsLid() {
+		return getProperty("klantnr").contains("Lidkaart");
+	}
+
+	public boolean isSpoedOpdr() {
+		return isSpoed;
+	}
+
+	public boolean isZelfst(){
+		//normally we can recognise business customers by the html code detail1_zelfst, in that case foundZelfstTag would be true.
+		//But if it is also a spoed-opdr, then we can still try to recognize it by checking whether the klantnr contains a Btw nr.(The last one only works when the user of the app has won the opdracht)
+		return getProperty("klantnr").contains("Btw nr.:")||foundZelfstTag;
+	}
+	public int getTijdKleur() {
+		int tijdKleur=CSSData.getKleur("1");
+		int verstreken=getAantalVerstekenUren();
+		for(int i=1;i<5;i++){
+			if(verstreken>=i*4){
+				tijdKleur=CSSData.getKleur((i+1)+"");
+			}
+		}
+		return tijdKleur;
+	}
+
+	public int getAantalVerstekenUren() {
+		String gepost=getProperty("gepost");
+		String regex="\\d{2,4}+";
+		Pattern p= Pattern.compile(regex);
+		Matcher m=p.matcher(gepost);
+		int[] date=new int[6];
+		int i=0;
+		while(m.find()){
+			date[i++]=Integer.parseInt(m.group());
+		}
+		//format of gepost: Vrijdag 10-07-2015 om 08:00:02
+		Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("Europe/Brussels"));
+		//date[1]-1 because January is 0 and not 1
+		cal.set(date[2], date[1]-1, date[0], date[3],date[4],date[5]);
+		Log.d("Uren1",cal.toString());
+
+		long yourmilliseconds = System.currentTimeMillis();
+		long diff=yourmilliseconds-cal.getTimeInMillis();
+//		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+//		Date d2 = new Date(yourmilliseconds);
+//		Date d=new Date(cal.getTimeInMillis());
+//		Log.d("Uren1", sdf.format(d));
+//		Log.d("Uren2", sdf.format(d2));
+
+
+		Log.d("Uren","int :"+(int) diff/(1000*3600)+"");
+
+		return (int) diff/(1000*3600);
 	}
 }
 

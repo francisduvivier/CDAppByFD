@@ -8,16 +8,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import duviwin.compudocapp.Connection.Connection;
-import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.html_info.HtmlInfo;
 
 public abstract class AbstrListRetriever {
-	public List<Opdracht> opdrachten;
+	public List<ShortOpdracht> opdrachten;
 
 	protected final HtmlInfo htmlInfo;
 	public AbstrListRetriever(HtmlInfo htmlInfo) {
 		this.htmlInfo=htmlInfo;
-		opdrachten = new ArrayList<Opdracht>();
+		opdrachten = new ArrayList<ShortOpdracht>();
 	}
 
 	public void downloadOpdrachten() {
@@ -36,7 +35,7 @@ public abstract class AbstrListRetriever {
 		for(int i=0;i<htmlInfo.getVals().length;i++){
             valList[i]=m.group(i+1);
         }
-		opdrachten.add(new Opdracht(htmlInfo,valList));
+		opdrachten.add(new ShortOpdracht(htmlInfo,valList));
 		Log.d("OpdrachtenInfo", "\n" + m.group(0));
 	}
 

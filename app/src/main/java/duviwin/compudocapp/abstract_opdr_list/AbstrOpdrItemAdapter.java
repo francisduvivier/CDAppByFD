@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import duviwin.compudocapp.OpdrachtDetails.Opdracht;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.html_info.HtmlInfoEnum;
@@ -20,7 +19,7 @@ import duviwin.compudocapp.html_info.HtmlInfoEnum;
 public abstract class AbstrOpdrItemAdapter extends ArrayAdapter {
     protected final LayoutInflater li;
     protected final HtmlInfo htmlInfo;
-    public AbstrOpdrItemAdapter(HtmlInfo htmlInfo,Context context, int resId, List<Opdracht> opdrList) {
+    public AbstrOpdrItemAdapter(HtmlInfo htmlInfo,Context context, int resId, List<ShortOpdracht> opdrList) {
         super(context, resId, opdrList);
         li = LayoutInflater.from(context);
         this.htmlInfo=htmlInfo;
@@ -31,7 +30,7 @@ public abstract class AbstrOpdrItemAdapter extends ArrayAdapter {
     public View getView(int pos, View convertView, ViewGroup parent) {
         View view = convertView;
         Holder viewHolder;
-        Opdracht opdr = (Opdracht) getItem(pos);
+        ShortOpdracht opdr = (ShortOpdracht) getItem(pos);
 //        if (view == null) {
 
             view = li.inflate(R.layout.opdracht_item, null);

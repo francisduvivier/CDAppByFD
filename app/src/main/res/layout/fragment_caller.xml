@@ -2,10 +2,16 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:onClick="bellen"
-    android:gravity="center_vertical"
     >
-
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="bellen"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="5dp"
+        android:background="@color/detailBG"
+        >
 
     <ImageView
         android:layout_width="wrap_content"
@@ -18,5 +24,5 @@
         android:layout_height="wrap_content"
         android:id="@+id/telnr"
         android:textSize="20dp" />
-
+</LinearLayout>
 </LinearLayout>
