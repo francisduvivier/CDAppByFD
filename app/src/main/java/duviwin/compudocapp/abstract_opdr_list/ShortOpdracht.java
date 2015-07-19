@@ -6,7 +6,7 @@ import android.util.Log;
 import java.io.Serializable;
 
 import duviwin.compudocapp.CSSData;
-import duviwin.compudocapp.OpdrachtDetails.DetailedOpdracht;
+import duviwin.compudocapp.opdracht_details.DetailedOpdracht;
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.html_info.HtmlInfoEnum;
 import duviwin.compudocapp.open_opdrachten.OpdrListHtmlInfo;

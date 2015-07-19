@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
 
     android:textIsSelectable="true"
-    tools:context="duviwin.compudocapp.OpdrachtDetails.ShowDetailsActivityFragment"
+    tools:context="duviwin.compudocapp.opdracht_details.ShowDetailsActivityFragment"
     tools:showIn="@layout/activity_show_details">
 
     <ScrollView

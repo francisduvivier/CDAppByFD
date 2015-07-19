@@ -1,4 +1,4 @@
-package duviwin.compudocapp.OpdrachtDetails;
+package duviwin.compudocapp.opdracht_details;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -282,7 +282,7 @@ public class DetailedOpdracht implements Serializable {
 	public int getOmschrijvingKleur(){
 		if(isSpoedOpdr()){
 			return CSSData.getKleur("_spoed");
-		}else if(opInfoItem[2]!=null&&opInfoItem[2].contains("geannuleerd")){
+		}else if(isGeannuleerd()){
 			return CSSData.getKleur("geannuleerd");
 		}
 		return Color.parseColor("white");
@@ -312,7 +312,7 @@ public class DetailedOpdracht implements Serializable {
 	}
 	public int getTijdKleur() {
 		int tijdKleur=CSSData.getKleur("1");
-		int verstreken=getAantalVerstekenUren();
+		long verstreken=getAantalVerstekenUren();
 		for(int i=1;i<5;i++){
 			if(verstreken>=i*4){
 				tijdKleur=CSSData.getKleur((i+1)+"");
@@ -321,24 +321,16 @@ public class DetailedOpdracht implements Serializable {
 		return tijdKleur;
 	}
 
-	public int getAantalVerstekenUren() {
-		String gepost=getProperty("gepost");
-		String regex="\\d{2,4}+";
-		Pattern p= Pattern.compile(regex);
-		Matcher m=p.matcher(gepost);
-		int[] date=new int[6];
-		int i=0;
-		while(m.find()){
-			date[i++]=Integer.parseInt(m.group());
+	public long getAantalVerstekenUren() {
+		long biedEindeMillis=System.currentTimeMillis();
+		if(biedenIsAfgelopen()){
+			//opInfoItem[0] is voor "gestart op: "
+		biedEindeMillis = calcMillis(opInfoItem[0]);
 		}
-		//format of gepost: Vrijdag 10-07-2015 om 08:00:02
-		Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("Europe/Brussels"));
-		//date[1]-1 because January is 0 and not 1
-		cal.set(date[2], date[1]-1, date[0], date[3],date[4],date[5]);
-		Log.d("Uren1",cal.toString());
 
-		long yourmilliseconds = System.currentTimeMillis();
-		long diff=yourmilliseconds-cal.getTimeInMillis();
+		long gepostOpMillis=calcMillis(getProperty("gepost"));
+
+		long diff=biedEindeMillis-gepostOpMillis;
 //		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
 //		Date d2 = new Date(yourmilliseconds);
 //		Date d=new Date(cal.getTimeInMillis());
@@ -346,9 +338,40 @@ public class DetailedOpdracht implements Serializable {
 //		Log.d("Uren2", sdf.format(d2));
 
 
-		Log.d("Uren","int :"+(int) diff/(1000*3600)+"");
+		Log.d("Uren","long :"+ diff/(1000*3600)+"");
 
-		return (int) diff/(1000*3600);
+		return diff/(1000*3600);
+	}
+
+	private long calcMillis(String compudocDate) {
+		String regex="\\d{2,4}+";
+		Pattern p= Pattern.compile(regex);
+		Matcher m=p.matcher(compudocDate);
+		int[] date=new int[6];
+		int i=0;
+		while(m.find()){
+			date[i++]=Integer.parseInt(m.group());
+		}
+		//Gepost op date format: Vrijdag 18-07-2015 om 08:00:02
+		Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("Europe/Brussels"));
+		//date[1]-1 because January is 0 and not 1
+		if(date[2]>31){
+			cal.set(date[2], date[1] - 1, date[0], date[3], date[4], date[5]);
+
+		}else{
+			//in this case we have a date of the format
+			//Vrijdag 2015-07-18 om 08:00:02, so in this case day and year is switched .
+
+			cal.set(date[0], date[1] - 1, date[2], date[3], date[4], date[5]);
+
+		}
+		Log.d("Uren1", cal.toString());
+		return cal.getTimeInMillis();
+
+	}
+
+	public boolean isGeannuleerd() {
+		return opInfoItem[2]!=null&&opInfoItem[2].contains("geannuleerd");
 	}
 }
 

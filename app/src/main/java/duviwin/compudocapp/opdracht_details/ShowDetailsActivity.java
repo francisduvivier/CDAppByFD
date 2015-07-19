@@ -1,4 +1,4 @@
-package duviwin.compudocapp.OpdrachtDetails;
+package duviwin.compudocapp.opdracht_details;
 
 import android.content.Intent;
 import android.net.Uri;

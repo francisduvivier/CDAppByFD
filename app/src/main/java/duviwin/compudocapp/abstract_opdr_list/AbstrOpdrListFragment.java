@@ -19,7 +19,7 @@ import java.util.List;
 
 import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.Events.MyEventListener;
-import duviwin.compudocapp.OpdrachtDetails.ShowDetailsActivity;
+import duviwin.compudocapp.opdracht_details.ShowDetailsActivity;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
 

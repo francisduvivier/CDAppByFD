@@ -1,4 +1,4 @@
-package duviwin.compudocapp.OpdrachtDetails;
+package duviwin.compudocapp.opdracht_details;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
