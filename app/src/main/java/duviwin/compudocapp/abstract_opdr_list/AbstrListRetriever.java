@@ -11,12 +11,12 @@ import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.html_info.HtmlInfo;
 
 public abstract class AbstrListRetriever {
-	public List<ShortOpdracht> opdrachten;
+	public List<GenericOpdracht> opdrachten;
 
 	protected final HtmlInfo htmlInfo;
 	public AbstrListRetriever(HtmlInfo htmlInfo) {
 		this.htmlInfo=htmlInfo;
-		opdrachten = new ArrayList<ShortOpdracht>();
+		opdrachten = new ArrayList<GenericOpdracht>();
 	}
 
 	public void downloadOpdrachten() {
@@ -35,7 +35,8 @@ public abstract class AbstrListRetriever {
 		for(int i=0;i<htmlInfo.getVals().length;i++){
             valList[i]=m.group(i+1);
         }
-		opdrachten.add(new ShortOpdracht(htmlInfo,valList));
+		opdrachten.add(new GenericOpdracht(htmlInfo, valList) {
+		});
 		Log.d("OpdrachtenInfo", "\n" + m.group(0));
 	}
 

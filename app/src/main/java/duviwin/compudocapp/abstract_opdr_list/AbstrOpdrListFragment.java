@@ -32,16 +32,18 @@ import duviwin.compudocapp.html_info.HtmlInfo;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public abstract class AbstrOpdrListFragment extends Fragment implements AbsListView.OnItemClickListener, MyEventListener {
+public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends Fragment implements AbsListView.OnItemClickListener
+//        , MyEventListener
+{
 
-    @Override
-    public void handleMsg(String msg){
-        opdrachten.add(ShortOpdracht.getDummy(msg));
-        mAdapter.notifyDataSetChanged();
-
-    }
+//    @Override
+//    public void handleMsg(String msg){
+//        opdrachten.add(GenericOpdracht.getDummy(msg));
+//        mAdapter.notifyDataSetChanged();
+//
+//    }
     protected final int listResId;
-    protected final AbstrListRetriever opdrachtenInfo;
+    protected final AbstrListRetriever listRetriever;
     //    protected OnFragmentInteractionListener mListener;
    final protected HtmlInfo htmlInfo;
     /**
@@ -54,9 +56,9 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
      */
     protected AbstrOpdrItemAdapter mAdapter;
     protected LayoutInflater li;
-    public void fillAdapter(List<ShortOpdracht> result){
+    public void fillAdapter(List<GenericOpdracht> result){
 
-// mAdapter = new OpdrItemAdapter(getActivity(),R.layout.opdracht_item,result);
+// mAdapter = new MijnOpdrAdapter(getActivity(),R.layout.opdracht_item,result);
         opdrachten.clear();
         opdrachten.addAll(result);
 
@@ -71,17 +73,17 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AbstrOpdrListFragment(int listResId,AbstrListRetriever oi, HtmlInfo htmlInfo) {
-        this.opdrachtenInfo=oi;
+    public AbstrOpdrListFragment(int listResId,AbstrListRetriever lr, HtmlInfo htmlInfo) {
+        this.listRetriever =lr;
         this.htmlInfo=htmlInfo;
         this.listResId = listResId;
     }
-    protected List<ShortOpdracht> opdrachten=new ArrayList<ShortOpdracht>();
+    protected List<GenericOpdracht> opdrachten=new ArrayList<GenericOpdracht>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        Connection.getConnection().opdrListFrgmt =this;
-        opdrachten.add(ShortOpdracht.getDummy("Loading..."));
+        opdrachten.add(E.getDummy("Loading..."));
         mAdapter = createAdapter();
         AppSettings.refreshPrefs(getActivity().getBaseContext());
         refreshList();
@@ -156,8 +158,8 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
     //this method is made so that the subclass can determine the adapter, it should only be called in onCreate;
     protected abstract AbstrOpdrItemAdapter createAdapter();
 
-    public AbstrListRetriever getOpdrInfo() {
-        return opdrachtenInfo;
+    public AbstrListRetriever getListRetriever() {
+        return listRetriever;
     }
 
     /**
@@ -174,18 +176,18 @@ public abstract class AbstrOpdrListFragment extends Fragment implements AbsListV
         // TODO: Update argument type and name
         void onFragmentInteraction(String id);
     }
-    private class HttpAsyncTask extends AsyncTask<AbstrOpdrListFragment, Void, List<ShortOpdracht>> {
+    private class HttpAsyncTask extends AsyncTask<AbstrOpdrListFragment, Void, List<GenericOpdracht>> {
         private AbstrOpdrListFragment f;
 
         @Override
-        protected List<ShortOpdracht> doInBackground(AbstrOpdrListFragment... fragments) {
+        protected List<GenericOpdracht> doInBackground(AbstrOpdrListFragment... fragments) {
             this.f = fragments[0];
-            AbstrListRetriever oi = f.getOpdrInfo();
+            AbstrListRetriever oi = f.getListRetriever();
             oi.downloadOpdrachten();
             return oi.opdrachten;
         }
         @Override
-        protected void onPostExecute(List<ShortOpdracht> result) {
+        protected void onPostExecute(List<GenericOpdracht> result) {
             f.fillAdapter(result);
         }
     }

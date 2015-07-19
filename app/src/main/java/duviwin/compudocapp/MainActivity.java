@@ -22,10 +22,12 @@ import java.util.Locale;
 
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.Events.EventSystem;
+import duviwin.compudocapp.mijn_opdrachten.MijnOpdrFragment;
+import duviwin.compudocapp.open_opdrachten.OpenOpdrFragment;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener
-//        , OpdrListFragment.OnFragmentInteractionListener
+//        , MijnOpdrFragment.OnFragmentInteractionListener
 {
 
     /**
@@ -162,9 +164,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return new duviwin.compudocapp.open_opdrachten.OpdrListFragment();
+                    return new OpenOpdrFragment();
                 case 1:
-                    return new duviwin.compudocapp.mijn_gegevens.OpdrListFragment();
+                    return new MijnOpdrFragment();
             default:
                 return PlaceholderFragment.newInstance(position);
             }

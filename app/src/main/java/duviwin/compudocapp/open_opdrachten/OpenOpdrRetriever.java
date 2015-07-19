@@ -5,12 +5,12 @@ import android.util.Log;
 import java.util.regex.Matcher;
 
 import duviwin.compudocapp.abstract_opdr_list.AbstrListRetriever;
-import duviwin.compudocapp.abstract_opdr_list.ShortOpdracht;
+import duviwin.compudocapp.abstract_opdr_list.GenericOpdracht;
 
-public class ListRetriever extends AbstrListRetriever {
+public class OpenOpdrRetriever extends AbstrListRetriever {
 
-	public ListRetriever(){
-		super(new OpdrListHtmlInfo());
+	public OpenOpdrRetriever(){
+		super(new OpenOpdrHtmlInfo());
 	}
 	@Override
 	public void downloadOpdrachten() {
@@ -33,6 +33,15 @@ public class ListRetriever extends AbstrListRetriever {
 		}
 	}
 
+	@Override
+	protected void addOpdrachtFromMatch(Matcher m) {
+		String[] valList=new String[htmlInfo.getVals().length];
+		for(int i=0;i<htmlInfo.getVals().length;i++){
+			valList[i]=m.group(i+1);
+		}
+		opdrachten.add(new ShortOpdracht(htmlInfo, valList));
+		Log.d("OpdrachtenInfo", "\n" + m.group(0));
+	}
 	@Override
 	public String getUrl() {
 			return "http://compudoc.be/index.php?page=opdrachten/open";

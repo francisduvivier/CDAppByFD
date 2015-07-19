@@ -1,11 +1,11 @@
-package duviwin.compudocapp.mijn_gegevens;
+package duviwin.compudocapp.mijn_opdrachten;
 
 import duviwin.compudocapp.abstract_opdr_list.AbstrListRetriever;
 
-public class ListRetriever extends AbstrListRetriever {
+public class MijnOpdrRetriever extends AbstrListRetriever {
 
-	public ListRetriever(){
-		super(new OpdrListHtmlInfo());
+	public MijnOpdrRetriever(){
+		super(new MijnOpdrHtmlInfo());
 	}
 	@Override
 	public String getUrl() {

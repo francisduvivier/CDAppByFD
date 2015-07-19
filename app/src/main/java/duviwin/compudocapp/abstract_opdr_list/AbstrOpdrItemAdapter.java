@@ -1,14 +1,17 @@
 package duviwin.compudocapp.abstract_opdr_list;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
+import duviwin.compudocapp.CSSData;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.html_info.HtmlInfoEnum;
@@ -18,25 +21,27 @@ import duviwin.compudocapp.html_info.HtmlInfoEnum;
  */
 public abstract class AbstrOpdrItemAdapter extends ArrayAdapter {
     protected final LayoutInflater li;
-    protected final HtmlInfo htmlInfo;
-    public AbstrOpdrItemAdapter(HtmlInfo htmlInfo,Context context, int resId, List<ShortOpdracht> opdrList) {
-        super(context, resId, opdrList);
-        li = LayoutInflater.from(context);
-        this.htmlInfo=htmlInfo;
+    private int resIdInflatable;
 
+    public AbstrOpdrItemAdapter(Context context, int resId, List opdrList) {
+        super(context, resId, opdrList);
+        this.resIdInflatable=resId;
+        li = LayoutInflater.from(context);
     }
 
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
         View view = convertView;
         Holder viewHolder;
-        ShortOpdracht opdr = (ShortOpdracht) getItem(pos);
+        GenericOpdracht opdr = (GenericOpdracht) getItem(pos);
+        HtmlInfo opdrHtmlInfo=opdr.htmlInfo;
 //        if (view == null) {
 
-            view = li.inflate(R.layout.opdracht_item, null);
-            final TextView[] tvs=new TextView[htmlInfo.getVals().length];
+        
+        view = li.inflate(resIdInflatable, null);
+            final TextView[] tvs=new TextView[opdrHtmlInfo.getVals().length];
             //First we put the views in a holder
-            for(HtmlInfoEnum enumVal:htmlInfo.getVals()){
+            for(HtmlInfoEnum enumVal:opdrHtmlInfo.getVals()){
                 if(enumVal.getResId()!=null){
                     tvs[enumVal.getIndex()] = ((TextView) view.findViewById(enumVal.getResId()));
                 }
@@ -47,10 +52,20 @@ public abstract class AbstrOpdrItemAdapter extends ArrayAdapter {
 //            holder = (Holder) convertView.getTag();
 //        }
         //this for loop fills in the textFields
-        for(HtmlInfoEnum enumVal:htmlInfo.getVals()) {
+        for(HtmlInfoEnum enumVal:opdrHtmlInfo.getVals()) {
             if (enumVal.getResId() != null) {
                 viewHolder.tvs[enumVal.getIndex()].setText(opdr.shrtInfo[enumVal.getIndex()]);
             }
+        }
+        if(opdr.isDummy){
+            for(HtmlInfoEnum enumVal:opdrHtmlInfo.getVals()){
+                if (enumVal.getResId() != null) {
+                if(enumVal.getIndex()!=opdrHtmlInfo.getLoadingIndex()){
+                viewHolder.tvs[enumVal.getIndex()].setHeight(0);}}
+            }
+            ((LinearLayout) viewHolder.tvs[opdrHtmlInfo.getLoadingIndex()].getParent().getParent()).setBackgroundColor(Color.parseColor("#000000"));
+            viewHolder.tvs[opdrHtmlInfo.getLoadingIndex()].setBackgroundColor(CSSData.getKleur("Loading"));
+//            viewHolder.tvs[htmlInfo.getLoadingIndex()].setText("Loading...");
         }
 
         return view;

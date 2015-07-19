@@ -7,7 +7,7 @@ import duviwin.compudocapp.html_info.HtmlInfoEnum;
 /**
  * Created by Duviwin on 7/8/2015.
  */
-public class OpdrListHtmlInfo implements HtmlInfo
+public class OpenOpdrHtmlInfo implements HtmlInfo
 {
     public static final String opdrListPattern=
             "(?:<.. class=\"opdracht([^\"]*)[^>]*?\"><a.*?opdrachtnr=([\\d+]*)[^>]*?\">[\\d+]*?</a></td>"
@@ -15,10 +15,6 @@ public class OpdrListHtmlInfo implements HtmlInfo
                     + "<.. class=\"opdracht\"[^>]*?\">(.*?)NC.*?</td>"
                     + "<.. class=\"opdracht\"[^>]*?>(?:<b>)?([^<>]*)(?:</b>)?</..>" +
                     "|hoofding\" style=\"text-align:left;padding:10px\" colspan=\"5\">(Opdrachten( van <b>(.*?)u en ouder)?))";
-
-    Nms num= Nms.opdrachtNr;
-    int i=num.index;
-    Nms[] tst= Nms.values();
 
 
     @Override
@@ -34,6 +30,11 @@ public class OpdrListHtmlInfo implements HtmlInfo
     @Override
     public int getOpdrNrIndex() {
         return Nms.opdrachtNr.index;
+    }
+
+    @Override
+    public int getLoadingIndex() {
+        return Nms.korteUitleg.index;
     }
 
     public enum Nms implements HtmlInfoEnum {

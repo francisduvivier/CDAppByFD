@@ -27,6 +27,8 @@ public class CSSData {
         KLEUR_MAP.put("_spoed","#FFFF66");
         KLEUR_MAP.put("lid","#8EAFDD");
         KLEUR_MAP.put("geannuleerd","#ff0000");
+        KLEUR_MAP.put("Loading","#ffffff");
+
 
     }
     public static int getKleur(String tag){

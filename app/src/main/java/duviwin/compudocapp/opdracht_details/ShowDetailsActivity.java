@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import duviwin.compudocapp.AppSettings;
+import duviwin.compudocapp.MainActivity;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.SettingsActivity;
 
@@ -34,7 +35,18 @@ public class ShowDetailsActivity extends ActionBarActivity {
         if (opdracht == null) {
             //In this case this is a call from an URI
             String url = intent.getData().toString();
-            opdracht = new DetailedOpdracht(Integer.parseInt(url.replaceAll(".*opdrachtnr=([\\d]*).*", "$1")));
+            if (url.contains("opdrachtnr=")){
+            String opdrNr=url.replaceAll(".*opdrachtnr=([\\d]*).*", "$1");
+                opdracht = new DetailedOpdracht(Integer.parseInt(opdrNr));
+            }
+            else{
+                //If the activity is launched with an url that does not have an opdrachtnummer, we just launch the main activity
+                finish();
+                Intent showMain = new Intent(this, MainActivity.class);
+                startActivity(showMain);
+                return;
+            }
+
         }
 
         class GetExtraInfoTask extends AsyncTask<Object, Void, DetailedOpdracht> {

@@ -8,5 +8,6 @@ public interface HtmlInfo extends Serializable {
     String getPattern();
     HtmlInfoEnum[] getVals();
     int getOpdrNrIndex();
+    int getLoadingIndex();
 }
 

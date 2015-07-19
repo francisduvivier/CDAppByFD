@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/afspr_eind_uur"
+         />
+    <TextView
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/afspr_opdracht_nr"
+         />
+    <TextView
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/afspr_klant_naam"
+         />
+    <TextView
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/afspr_tel_nrs"
+         />
+    <TextView
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/afspr_straat_en_nr"
+         />
+    <TextView
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/afspr_postcode_en_stad"
+         />
+    <TextView
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/afspr_datum_en_tijd"
+         />
+    <TextView
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/afspr_opmerking"
+         />
+</LinearLayout>

@@ -1,4 +1,4 @@
-package duviwin.compudocapp.mijn_gegevens;
+package duviwin.compudocapp.mijn_opdrachten;
 
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
@@ -7,7 +7,7 @@ import duviwin.compudocapp.html_info.HtmlInfoEnum;
 /**
  * Created by Duviwin on 7/8/2015.
  */
-public class OpdrListHtmlInfo implements HtmlInfo
+public class MijnOpdrHtmlInfo implements HtmlInfo
 {
     public static final String opdrListPattern=
 //            "(.*)";
@@ -27,11 +27,6 @@ public class OpdrListHtmlInfo implements HtmlInfo
      * <td class="lid2">Lopend</td>
      * <td class="lid2" style="text-align:center;">9 dagen, 7 u , 18  min , en 46  sec</td></tr></table>
     **/
-     Nms num= Nms.opdrachtNr;
-    int i=num.index;
-    Nms[] tst= Nms.values();
-
-
     @Override
     public String getPattern() {
         return opdrListPattern;
@@ -40,6 +35,11 @@ public class OpdrListHtmlInfo implements HtmlInfo
     @Override
     public int getOpdrNrIndex() {
         return Nms.opdrachtNr.index;
+    }
+
+    @Override
+    public int getLoadingIndex() {
+        return Nms.korteUitleg.index;
     }
 
     @Override
