@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 //        , MijnOpdrFragment.OnFragmentInteractionListener
 {
 
+    private static final int REQ_CODE_SETTINGS_MAIN = 01;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -93,7 +94,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         if(prefMgr.getString("userNameKey", "").equals("")){
             Intent showSettings=new Intent(this,SettingsActivity.class);
 
-            startActivity(showSettings);
+            startActivityForResult(showSettings,REQ_CODE_SETTINGS_MAIN);
         }
 
     }
@@ -119,7 +120,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         switch (id) {
             case R.id.action_settings:
                 Intent showSettings = new Intent(this, SettingsActivity.class);
-                startActivity(showSettings);
+
+                startActivityForResult(showSettings, REQ_CODE_SETTINGS_MAIN);
                 return true;
             case R.id.action_refresh:
                 Intent intent = getIntent();
@@ -130,9 +132,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent data){
+        if(requestCode==REQ_CODE_SETTINGS_MAIN){
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+    }
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
@@ -226,10 +233,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            //FDcode
-            TextView tv= (TextView) rootView.findViewById(R.id.section_label);
-            tv.setText("hi");
-
             return rootView;
         }
     }

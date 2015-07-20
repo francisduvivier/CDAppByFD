@@ -56,7 +56,11 @@ public class Connection implements Serializable,MyPublisher {
 
 		try{return doHttpStuffHelp(method,urlToRead,params);}catch (NotLoggedInException nle){
 			Login();
-			return doHttpStuff(method,urlToRead,params);
+			if(isLoggedIn){
+			return doHttpStuff(method,urlToRead,params);}
+			else {
+				Log.d("LoginError","Connection.doHttpStuff() failed because we could not log in");
+				return "Failed to log in";}
 		}
 	}
 

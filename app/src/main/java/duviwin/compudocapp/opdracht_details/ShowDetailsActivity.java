@@ -23,8 +23,17 @@ import duviwin.compudocapp.SettingsActivity;
 
 
 public class ShowDetailsActivity extends ActionBarActivity {
+    private static final int REQ_CODE_SETTINGS_SHWDET = 2;
     DetailedOpdracht opdracht = null;
 
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent data){
+        if(requestCode== REQ_CODE_SETTINGS_SHWDET){
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +155,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
         switch (id) {
             case R.id.action_settings:
                 Intent showSettings = new Intent(this, SettingsActivity.class);
-                startActivity(showSettings);
+                startActivityForResult(showSettings, REQ_CODE_SETTINGS_SHWDET);
                 return true;
             case R.id.action_refresh:
                 Intent intent = getIntent();

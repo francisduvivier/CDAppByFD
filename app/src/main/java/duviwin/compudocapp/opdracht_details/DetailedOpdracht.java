@@ -3,6 +3,8 @@ package duviwin.compudocapp.opdracht_details;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -235,6 +237,10 @@ public class DetailedOpdracht implements Serializable {
 //		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 //		startActivity(intent);
 		//todo for bieden
+		((TextView) activity.findViewById(R.id.det_bod_result)).setText("We zijn het volgende bod aan het versturen: "+bod+"NC met max "+maxBod+"NC" );
+		((EditText) activity.findViewById(R.id.min_bod)).setText("");
+		((EditText) activity.findViewById(R.id.max_bod)).setText("");
+
 		class BiedenTask extends AsyncTask<Void, Void, String> {
 				@Override
 				protected String doInBackground(Void... params) {
