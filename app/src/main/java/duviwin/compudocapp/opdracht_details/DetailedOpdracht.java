@@ -230,7 +230,19 @@ public class DetailedOpdracht implements Serializable {
 	public boolean isGewonnenDoorGebruiker(){
 		return getProperty("straat").contains("Telefoon:");
 	}
+	public boolean gebruikerHeeftVoorrecht(){
+		return getProperty("voorkeur").replaceAll("[^\\d]","").equals(AppSettings.userName);
+	}
+
 	public void bied(final int bod, final int maxBod, final ShowDetailsActivity activity){
+		((EditText) activity.findViewById(R.id.min_bod)).setText("");
+		((EditText) activity.findViewById(R.id.max_bod)).setText("");
+		bied(bod,maxBod,activity,"submit_bod=Bieden%21");
+	}
+	public void eisOp(final ShowDetailsActivity activity){
+		bied(10,10,activity,"submit_voorrecht=Opeisen%21");
+	}
+	private void bied(final int bod, final int maxBod, final ShowDetailsActivity activity,final String submitter){
 		//todo work with the following data
 		//todo for open webpage
 //		Uri uri = Uri.parse("http://localhost:8080/test/error.jsp;jsessionid=C4E6732EBB4C17F409AB41143735C096");
@@ -238,15 +250,13 @@ public class DetailedOpdracht implements Serializable {
 //		startActivity(intent);
 		//todo for bieden
 		((TextView) activity.findViewById(R.id.det_bod_result)).setText("We zijn het volgende bod aan het versturen: "+bod+"NC met max "+maxBod+"NC" );
-		((EditText) activity.findViewById(R.id.min_bod)).setText("");
-		((EditText) activity.findViewById(R.id.max_bod)).setText("");
-
 		class BiedenTask extends AsyncTask<Void, Void, String> {
 				@Override
 				protected String doInBackground(Void... params) {
+
 					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + DetailedOpdracht.this.opdrNr +
 							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + DetailedOpdracht.this.opdrNr +
-							"&max_bod=" + maxBod + "&submit_bod=Bieden%21");
+							"&max_bod=" + maxBod + "&"+submitter);
 					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","$1");
 					getExtraInfo();
 					return result;

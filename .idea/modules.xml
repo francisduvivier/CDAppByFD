@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CDAppByFD.iml" filepath="$PROJECT_DIR$/CDAppByFD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CompudocApp.iml" filepath="$PROJECT_DIR$/CompudocApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

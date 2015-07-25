@@ -343,13 +343,12 @@
                     android:layout_marginBottom="5dp"
                     android:onClick="bieden"
                     android:text="@string/stuur_bod" />
-
-                <TextView
-                    android:id="@+id/det_bod_result"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/det_bod_result"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 

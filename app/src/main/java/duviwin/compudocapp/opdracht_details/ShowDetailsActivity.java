@@ -79,8 +79,10 @@ public class ShowDetailsActivity extends ActionBarActivity {
         for (String prop : opdr.allProperties) {
             try {
                 TextView tv = ((TextView) findViewById(DetailedOpdracht.getPropertyId(i++)));
+                if(tv!=null){
                 tv.setPadding(0, 5, 0, 5);
                 tv.setText(prop);
+                }
 //                ((ViewGroup.MarginLayoutParams) tv.getLayoutParams()).setMargins(0, 5, 0, 5);
             } catch (HasNoPropIdException e) {
                 //do nothing
@@ -117,6 +119,10 @@ public class ShowDetailsActivity extends ActionBarActivity {
 
                     }
                 }
+
+            }else if(opdr.gebruikerHeeftVoorrecht()){
+                ((LinearLayout) findViewById(R.id.enkel_voor_open)).removeAllViews();
+                addOpeisKnop((LinearLayout) findViewById(R.id.enkel_voor_open));
             }
         } catch (HasNoPropIdException e) {
             throw new RuntimeException(e.getMessage() + " ,getPropertyId(\"gepost\") or getPropertyId(\"huidigbod\") seems to have thrown a HasNoPropIdException, this is very weird.");
@@ -124,6 +130,12 @@ public class ShowDetailsActivity extends ActionBarActivity {
 
 
     }
+
+    private void addOpeisKnop(LinearLayout linearLayout) {
+        View knop = getLayoutInflater().inflate(R.layout.eis_op_knop,null);
+        linearLayout.addView(knop);
+    }
+
 
     private void addOptionalInfo() {
         for(int i=0;i<opdracht.opInfoItem.length;i++){
@@ -174,6 +186,9 @@ public class ShowDetailsActivity extends ActionBarActivity {
         int maxBod = Integer.parseInt(maxBodView.getText().toString());
 
         opdracht.bied(minBod, maxBod, this);
+    }
+    public void opeisen(View view) {
+        opdracht.eisOp(this);
     }
 
     public void openMaps(View view) {

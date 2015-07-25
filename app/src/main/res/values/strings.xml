@@ -14,6 +14,7 @@
     <string name="title_opdracht_details">Details Opdracht</string>
     <string name="title_activity_show_details">ShowDetailsActivity</string>
     <string name="stuur_bod">Bieden!</string>
+    <string name="eis_op">Opeisen!</string>
     <string name="min_bod">Minimum bod: </string>
     <string name="max_bod">Overbieden tot: </string>
     <string name="fb_score">Feedback score: </string>
