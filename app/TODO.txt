@@ -1,4 +1,4 @@
--Trial versie
+-Fix voor te annuleren opdrachten bij mijn opdrachten
 -Mijn afspraken weergeven
     -layout bekijken
 
@@ -9,6 +9,8 @@
 -enkel voor bieden uit layout fragment halen
 -alle velden detail opdracht laten aanmaken ahv generisch layout fragment--> minder hardcoding, meer dynamisch
 -Loading layout fragment maken en gebruiken
+-Trial systeem beter uitwerken
+
 Te testen:
 -Testen van spoedopdracht
 -geen crash bij opeisen opdracht

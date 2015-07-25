@@ -7,7 +7,6 @@ import java.io.Serializable;
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.html_info.HtmlInfoEnum;
 import duviwin.compudocapp.opdracht_details.DetailedOpdracht;
-import duviwin.compudocapp.open_opdrachten.OpenOpdrHtmlInfo;
 
 /**
  * Created by duvibuntu on 19.07.15.
@@ -17,16 +16,16 @@ public abstract class GenericOpdracht implements Serializable {
     public final HtmlInfo htmlInfo;
     public boolean isDummy;
 
-    public static GenericOpdracht getDummy(String text) {
-        return new GenericOpdracht(text) {
+    public static GenericOpdracht getDummy(HtmlInfo hi,String text) {
+        return new GenericOpdracht(hi,text) {
         };
     }
 
-    public GenericOpdracht(String text){
+    public GenericOpdracht(HtmlInfo hi,String text){
         this.isDummy = true;
-        this.htmlInfo = new OpenOpdrHtmlInfo();
-        this.shrtInfo = new String[OpenOpdrHtmlInfo.Nms.values().length];
-        this.shrtInfo[htmlInfo.getLoadingIndex()] = text;
+        this.htmlInfo = hi;
+        this.shrtInfo = new String[hi.getVals().length];
+        this.shrtInfo[hi.getLoadingIndex()] = text;
     }
     public GenericOpdracht(HtmlInfo hi, String[] vals) {
         for(String val:vals){

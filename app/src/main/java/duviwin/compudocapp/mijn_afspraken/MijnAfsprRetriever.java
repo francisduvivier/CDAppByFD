@@ -1,15 +1,14 @@
 package duviwin.compudocapp.mijn_afspraken;
 
 import duviwin.compudocapp.abstract_opdr_list.AbstrListRetriever;
-import duviwin.compudocapp.mijn_opdrachten.MijnOpdrHtmlInfo;
 
 public class MijnAfsprRetriever extends AbstrListRetriever {
 
 	public MijnAfsprRetriever(){
-		super(new MijnOpdrHtmlInfo());
+		super(new MijnAfsprHtmlInfo());
 	}
 	@Override
 	public String getUrl() {
-		return "http://compudoc.be/index.php?page=login/mijn%20gegevens";
+		return "http://compudoc.be/index.php?page=appointment/modify&cat=informatie&ond=114&head_menu=11";
 	}
 }

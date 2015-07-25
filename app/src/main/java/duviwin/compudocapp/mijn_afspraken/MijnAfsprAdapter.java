@@ -23,7 +23,6 @@ public class MijnAfsprAdapter extends AbstrOpdrItemAdapter {
         //the parent method fills in the textvalues
         View view=super.getView(pos,convertView,parent);
         //TODO
-
         return view;
 
     }

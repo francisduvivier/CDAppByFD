@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import duviwin.compudocapp.CSSData;
-import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.html_info.HtmlInfoEnum;
 
@@ -31,39 +30,47 @@ public abstract class AbstrOpdrItemAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
-        View view = convertView;
         Holder viewHolder;
         GenericOpdracht opdr = (GenericOpdracht) getItem(pos);
-        HtmlInfo opdrHtmlInfo=opdr.htmlInfo;
-//        if (view == null) {
+        HtmlInfo opdrHtmlInfo = opdr.htmlInfo;
+//        View view = convertView;
 
-        
-        view = li.inflate(resIdInflatable, null);
-            final TextView[] tvs=new TextView[opdrHtmlInfo.getVals().length];
+//        if (view != null && !((Holder) view.getTag()).isDummy()) {
+//            viewHolder = ((Holder) view.getTag());
+//        } else {
+        View view = li.inflate(resIdInflatable, null);
+            final TextView[] tvs = new TextView[opdrHtmlInfo.getVals().length];
             //First we put the views in a holder
-            for(HtmlInfoEnum enumVal:opdrHtmlInfo.getVals()){
-                if(enumVal.getResId()!=null){
-                    tvs[enumVal.getIndex()] = ((TextView) view.findViewById(enumVal.getResId()));
+        int i=0;
+        for (HtmlInfoEnum enumVal : opdrHtmlInfo.getVals()) {
+            i++;
+                if (enumVal.getResId() != null) {
+                    TextView tv=((TextView) view.findViewById(enumVal.getResId()));
+                    if(tv==null){
+                        throw new RuntimeException("This should not happen, here is some debug info: i="+i+", view:"+view+" htmlclass"+opdrHtmlInfo.getClass());
+                    }
+                    tvs[enumVal.getIndex()] = tv;
                 }
             }
-            viewHolder = new Holder(tvs);
+            viewHolder = new Holder(tvs, opdr.isDummy);
             view.setTag(viewHolder);
-//        } else {
-//            holder = (Holder) convertView.getTag();
 //        }
         //this for loop fills in the textFields
-        for(HtmlInfoEnum enumVal:opdrHtmlInfo.getVals()) {
+        for (HtmlInfoEnum enumVal : opdrHtmlInfo.getVals()) {
             if (enumVal.getResId() != null) {
                 viewHolder.tvs[enumVal.getIndex()].setText(opdr.shrtInfo[enumVal.getIndex()]);
             }
         }
-        if(opdr.isDummy){
-            for(HtmlInfoEnum enumVal:opdrHtmlInfo.getVals()){
+        if (opdr.isDummy) {
+            for (HtmlInfoEnum enumVal : opdrHtmlInfo.getVals()) {
                 if (enumVal.getResId() != null) {
-                if(enumVal.getIndex()!=opdrHtmlInfo.getLoadingIndex()){
-                viewHolder.tvs[enumVal.getIndex()].setHeight(0);}}
+                    if (enumVal.getIndex() != opdrHtmlInfo.getLoadingIndex()) {
+                        viewHolder.tvs[enumVal.getIndex()].setHeight(0);
+                    }
+                }
             }
-            ((LinearLayout) viewHolder.tvs[opdrHtmlInfo.getLoadingIndex()].getParent().getParent()).setBackgroundColor(Color.parseColor("#000000"));
+            if(viewHolder.tvs[opdrHtmlInfo.getLoadingIndex()].getParent().getParent()!=null){
+            ((LinearLayout) viewHolder.tvs[opdrHtmlInfo.getLoadingIndex()].getParent().getParent()).setBackgroundColor(Color.parseColor("#000000"));}
             viewHolder.tvs[opdrHtmlInfo.getLoadingIndex()].setBackgroundColor(CSSData.getKleur("Loading"));
 //            viewHolder.tvs[htmlInfo.getLoadingIndex()].setText("Loading...");
         }
@@ -72,10 +79,16 @@ public abstract class AbstrOpdrItemAdapter extends ArrayAdapter {
 
     }
 
-    protected class Holder{
+    protected class Holder {
         public final TextView[] tvs;
-        public Holder(TextView[] tvs){
+        private final boolean isDummy;
+
+        public Holder(TextView[] tvs, boolean isDummy){
+            this.isDummy=isDummy;
             this.tvs=tvs;
         }
+        public boolean isDummy(){
+
+            return isDummy;}
     }
 }

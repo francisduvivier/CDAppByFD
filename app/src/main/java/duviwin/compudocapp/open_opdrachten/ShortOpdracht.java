@@ -3,8 +3,6 @@ package duviwin.compudocapp.open_opdrachten;
 import android.graphics.Color;
 import android.util.Log;
 
-import java.io.Serializable;
-
 import duviwin.compudocapp.CSSData;
 import duviwin.compudocapp.abstract_opdr_list.GenericOpdracht;
 import duviwin.compudocapp.html_info.HtmlInfo;
@@ -20,7 +18,7 @@ public class ShortOpdracht extends GenericOpdracht {
 
 
     private ShortOpdracht(String text) {
-        super(text);
+        super(new OpenOpdrHtmlInfo(),text);
         this.SPOED = false;
         this.klantIsLid=false;
     }

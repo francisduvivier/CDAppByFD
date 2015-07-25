@@ -3,7 +3,7 @@ package duviwin.compudocapp.mijn_afspraken;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrItemAdapter;
 import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrListFragment;
-import duviwin.compudocapp.mijn_opdrachten.MijnOpdrHtmlInfo;
+import duviwin.compudocapp.abstract_opdr_list.GenericOpdracht;
 
 /**
  * A fragment representing a list of Items.
@@ -14,13 +14,13 @@ import duviwin.compudocapp.mijn_opdrachten.MijnOpdrHtmlInfo;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class MijnAfsprFragment extends AbstrOpdrListFragment {
+public class MijnAfsprFragment extends AbstrOpdrListFragment<GenericOpdracht> {
     public MijnAfsprFragment(){
-        super(R.layout.fragment_mijn_opdr,new MijnAfsprRetriever(),new MijnOpdrHtmlInfo());
+        super(R.layout.fragment_mijn_afspr,new MijnAfsprRetriever(),new MijnAfsprHtmlInfo());
     }
 
     @Override
     protected AbstrOpdrItemAdapter createAdapter(){
-        return new MijnAfsprAdapter(new MijnOpdrHtmlInfo(),getActivity(), R.layout.opdracht_item,opdrachten);
+        return new MijnAfsprAdapter(new MijnAfsprHtmlInfo(),getActivity(), R.layout.fragment_afspr_item,opdrachten);
     }
 }

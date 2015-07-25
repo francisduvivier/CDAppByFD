@@ -16,12 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.Locale;
 
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.Events.EventSystem;
+import duviwin.compudocapp.mijn_afspraken.MijnAfsprFragment;
 import duviwin.compudocapp.mijn_opdrachten.MijnOpdrFragment;
 import duviwin.compudocapp.open_opdrachten.OpenOpdrFragment;
 
@@ -174,6 +174,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     return new OpenOpdrFragment();
                 case 1:
                     return new MijnOpdrFragment();
+                case 2:
+                    return new MijnAfsprFragment();
             default:
                 return PlaceholderFragment.newInstance(position);
             }
@@ -181,9 +183,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         @Override
         public int getCount() {
-            // Show 1 total pages.
-            return 2;
-//            return 4;
+            // Show 3 total pages.
+            return 3;
         }
 
         @Override
@@ -193,11 +194,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 case 0:
                     return getString(R.string.title_open).toUpperCase(l);
                 case 1:
-//                    return getString(R.string.title_factuur).toUpperCase(l);
-//                case 2:
-//                    return getString(R.string.title_afspraken).toUpperCase(l);
-//                case 3:
                     return getString(R.string.title_mijn).toUpperCase(l);
+                case 2:
+                    return getString(R.string.title_afspraken).toUpperCase(l);
+//                case 3:
+//                    return getString(R.string.title_factuur).toUpperCase(l);
             }
             return null;
         }

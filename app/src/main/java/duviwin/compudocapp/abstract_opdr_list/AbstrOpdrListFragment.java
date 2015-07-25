@@ -18,10 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import duviwin.compudocapp.AppSettings;
-import duviwin.compudocapp.Events.MyEventListener;
-import duviwin.compudocapp.opdracht_details.ShowDetailsActivity;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
+import duviwin.compudocapp.opdracht_details.ShowDetailsActivity;
 
 /**
  * A fragment representing a list of Items.
@@ -83,7 +82,7 @@ public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends F
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        Connection.getConnection().opdrListFrgmt =this;
-        opdrachten.add(E.getDummy("Loading..."));
+        opdrachten.add(E.getDummy(htmlInfo,"Loading..."));
         mAdapter = createAdapter();
         AppSettings.refreshPrefs(getActivity().getBaseContext());
         refreshList();
@@ -102,6 +101,7 @@ public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends F
 
         mListView = (AbsListView) view.findViewById(R.id.my_opdr_list);
         mListView.setAdapter(mAdapter);
+
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
