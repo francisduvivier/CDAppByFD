@@ -20,6 +20,7 @@ import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.MainActivity;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.SettingsActivity;
+import duviwin.compudocapp.trial_check.TrialChecker;
 
 
 public class ShowDetailsActivity extends ActionBarActivity {
@@ -128,7 +129,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
             throw new RuntimeException(e.getMessage() + " ,getPropertyId(\"gepost\") or getPropertyId(\"huidigbod\") seems to have thrown a HasNoPropIdException, this is very weird.");
         }
 
-
+        TrialChecker.checkTrial(DetailedOpdracht.calcMillis(opdr.getProperty("gepost")),this);
     }
 
     private void addOpeisKnop(LinearLayout linearLayout) {

@@ -1,0 +1,14 @@
+-Trial versie
+-Mijn afspraken weergeven
+    -layout bekijken
+
+-Opdrachten permanent opslaan
+-Terugknop bij settings
+-scroll to refresh
+-automatische refresh met notificaties
+-enkel voor bieden uit layout fragment halen
+-alle velden detail opdracht laten aanmaken ahv generisch layout fragment--> minder hardcoding, meer dynamisch
+-Loading layout fragment maken en gebruiken
+Te testen:
+-Testen van spoedopdracht
+-geen crash bij opeisen opdracht

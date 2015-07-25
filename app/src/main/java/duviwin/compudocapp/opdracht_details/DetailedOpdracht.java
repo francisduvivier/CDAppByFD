@@ -359,7 +359,9 @@ public class DetailedOpdracht implements Serializable {
 		return diff/(1000*3600);
 	}
 
-	private long calcMillis(String compudocDate) {
+	public static long calcMillis(String compudocDate) {
+
+
 		String regex="\\d{2,4}+";
 		Pattern p= Pattern.compile(regex);
 		Matcher m=p.matcher(compudocDate);
@@ -382,6 +384,7 @@ public class DetailedOpdracht implements Serializable {
 
 		}
 		Log.d("Uren1", cal.toString());
+
 		return cal.getTimeInMillis();
 
 	}
