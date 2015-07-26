@@ -1,6 +1,7 @@
 package duviwin.compudocapp.abstract_opdr_list;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import duviwin.compudocapp.AppSettings;
+import duviwin.compudocapp.Connection.BadCredentialsException;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.opdracht_details.ShowDetailsActivity;
@@ -195,13 +197,23 @@ public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends F
         protected List<GenericOpdracht> doInBackground(AbstrOpdrListFragment... fragments) {
             this.f = fragments[0];
             AbstrListRetriever oi = f.getListRetriever();
-            oi.downloadOpdrachten();
+            try{oi.downloadOpdrachten();}catch (BadCredentialsException e){
+            return null;
+            }
             return oi.opdrachten;
         }
-        @Override
-        protected void onPostExecute(List<GenericOpdracht> result) {
+
+    @Override
+    protected void onPostExecute(List<GenericOpdracht> result) {
+        if (result == null) {
+            new AlertDialog.Builder(f.getActivity())
+                    .setTitle("Username of wachtwoord fout, pas aan in instellingen AUB!")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        } else {
             f.fillAdapter(result);
         }
     }
+}
 
 }

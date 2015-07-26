@@ -17,6 +17,9 @@ import duviwin.compudocapp.Events.EventSystem;
 import duviwin.compudocapp.Events.MyPublisher;
 
 public class Connection implements Serializable,MyPublisher {
+	public static final String BAD_CREDENTIALS = "Verkeerd paswoord ingegeven";
+	public static final String LOGIN_SUCCESS = "U bent nu ingelogd";
+
 	final int publisherId=0;
 	@Override
 	public int getPublisherId(){
@@ -32,18 +35,27 @@ public class Connection implements Serializable,MyPublisher {
 		}
 		return currConnection;
 	}
-	private String Login() {
+	private String Login() throws BadCredentialsException{
 		String result=doPost("http://www.compudoc.be/index.php",
 				"status=login&login_name=" + AppSettings.userName + "&login_password="
 						+ AppSettings.password + "&submit=Login");
-		isLoggedIn=result.contains("U bent nu ingelogd");
+		isLoggedIn=result.contains(LOGIN_SUCCESS);
+		if(isLoggedIn){
+			result=LOGIN_SUCCESS;
+		}
+		else if(result.contains(BAD_CREDENTIALS)){
+			result=BAD_CREDENTIALS;
+			throw new BadCredentialsException();
+		}else{
+			result="";
+		}
 		if(!isLoggedIn){
 			Log.v("Login","Login failed");
 		}
 		return result;
 	}
 
-	public String doPost(String urlToRead, String params) {
+	public String doPost(String urlToRead, String params) throws BadCredentialsException{
 		String response = "";
 		try {
 			response = doHttpStuff("POST", urlToRead, params);
@@ -52,15 +64,15 @@ public class Connection implements Serializable,MyPublisher {
 		}
 		return response;
 	}
-	private String doHttpStuff(String method, String urlToRead, String params)throws  IOException{
+	private String doHttpStuff(String method, String urlToRead, String params)throws  IOException, BadCredentialsException{
 
 		try{return doHttpStuffHelp(method,urlToRead,params);}catch (NotLoggedInException nle){
-			Login();
+			String loginResult=Login();
 			if(isLoggedIn){
 			return doHttpStuff(method,urlToRead,params);}
 			else {
 				Log.d("LoginError","Connection.doHttpStuff() failed because we could not log in");
-				return "Failed to log in";}
+				return loginResult;}
 		}
 	}
 
@@ -161,7 +173,7 @@ public class Connection implements Serializable,MyPublisher {
 		return str;
 	}
 
-	public String doGet(String urlToRead, String params) {
+	public String doGet(String urlToRead, String params) throws BadCredentialsException{
 		if(!isLoggedIn){
 			Login();
 		}

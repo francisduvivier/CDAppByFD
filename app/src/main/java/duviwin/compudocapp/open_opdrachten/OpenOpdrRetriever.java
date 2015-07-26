@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.regex.Matcher;
 
+import duviwin.compudocapp.Connection.BadCredentialsException;
 import duviwin.compudocapp.abstract_opdr_list.AbstrListRetriever;
 
 public class OpenOpdrRetriever extends AbstrListRetriever {
@@ -12,7 +13,7 @@ public class OpenOpdrRetriever extends AbstrListRetriever {
 		super(new OpenOpdrHtmlInfo());
 	}
 	@Override
-	public void downloadOpdrachten() {
+	public void downloadOpdrachten() throws BadCredentialsException{
 		opdrachten.clear();
 		Matcher m=getPreparedMatcher();
 

@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.CSSData;
+import duviwin.compudocapp.Connection.BadCredentialsException;
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.R;
 
@@ -82,6 +83,7 @@ public class DetailedOpdracht implements Serializable {
 
 	//Deze methode zorgt ervoor dat extra info over de opdracht opgehaald wordt via de opdrachtlink en dat die info dan hier in het object gezet wordt.
 	public void getExtraInfo(){
+		try{
 		String opdrachtUrl = "http://www.compudoc.be/index.php?page=opdrachten/detail&opdrachtnr="
 				+ opdrNr
 				;
@@ -197,7 +199,10 @@ public class DetailedOpdracht implements Serializable {
 		setProperty("huidigbod",huidigBod);
 
 
+}catch (BadCredentialsException e){
+			//Do Nothing
 
+		}
 	}
 
 	public void setProperty(String name,String newVal){
@@ -253,13 +258,15 @@ public class DetailedOpdracht implements Serializable {
 		class BiedenTask extends AsyncTask<Void, Void, String> {
 				@Override
 				protected String doInBackground(Void... params) {
-
+					try{
 					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + DetailedOpdracht.this.opdrNr +
 							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + DetailedOpdracht.this.opdrNr +
 							"&max_bod=" + maxBod + "&"+submitter);
 					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","$1");
 					getExtraInfo();
-					return result;
+					return result;}catch(BadCredentialsException e){
+						return Connection.BAD_CREDENTIALS;
+					}
 
 				}
 				@Override

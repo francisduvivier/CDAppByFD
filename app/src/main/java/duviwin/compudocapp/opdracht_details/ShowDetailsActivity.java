@@ -166,7 +166,6 @@ public class ShowDetailsActivity extends ActionBarActivity {
                     .setTitle("There seems to be no connectivity!")
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
-//            finish();
         }
 
     }

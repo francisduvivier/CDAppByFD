@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import duviwin.compudocapp.Connection.BadCredentialsException;
 import duviwin.compudocapp.Connection.Connection;
 import duviwin.compudocapp.html_info.HtmlInfo;
 
@@ -19,7 +20,7 @@ public abstract class AbstrListRetriever {
 		opdrachten = new ArrayList<GenericOpdracht>();
 	}
 
-	public void downloadOpdrachten() {
+	public void downloadOpdrachten() throws BadCredentialsException{
 		opdrachten.clear();
 		Matcher m=getPreparedMatcher();
 		Log.d("listRetrieverMatch", "Strarting trying to match");
@@ -43,10 +44,9 @@ public abstract class AbstrListRetriever {
 
 	public abstract String getUrl();
 
-	public Matcher getPreparedMatcher() {
+	public Matcher getPreparedMatcher() throws BadCredentialsException{
 		String fullPage = Connection.getConnection().doGet(
 				getUrl(), "");
-
 		String line = fullPage;
 		Log.d("listretriever","tried getting url: "+getUrl()+", resultString is of length: "+line.length());
 
