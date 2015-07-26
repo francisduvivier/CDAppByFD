@@ -50,15 +50,18 @@ public class ShowDetailsActivity extends ActionBarActivity {
         AppSettings.refreshPrefs(getBaseContext());
         setContentView(R.layout.activity_show_details);
         Intent intent = getIntent();
-        opdracht = (DetailedOpdracht) intent.getSerializableExtra("opdracht");
+        int opdrNr=intent.getIntExtra("opdracht",-1);
+        if(opdrNr!=-1){
+        opdracht = new DetailedOpdracht(opdrNr);}
+
         if (opdracht == null) {
         MyTracker.startAnalytics(this);
             //In this case this is a call from an URI
             String url = intent.getData().toString();
             if (url.contains("opdrachtnr=")){
 
-            String opdrNr=url.replaceAll(".*opdrachtnr=([\\d]*).*", "$1");
-                opdracht = new DetailedOpdracht(Integer.parseInt(opdrNr));
+            String opdrNrString=url.replaceAll(".*opdrachtnr=([\\d]*).*", "$1");
+                opdracht = new DetailedOpdracht(Integer.parseInt(opdrNrString));
                 MyTracker.send(getString(R.string.open_from_uri), getString(R.string.open_from_uri_good), "OpdrNr:" + opdracht.opdrNr)
                         ;
             }

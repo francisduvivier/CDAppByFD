@@ -132,7 +132,7 @@ public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends F
 //                null != mListener&&
                         !opdrachten.get(position).isDummy) {
            Intent intent=new Intent(getActivity(),ShowDetailsActivity.class);
-            intent.putExtra("opdracht",opdrachten.get(position).makeDetailedOpdr());
+            intent.putExtra("opdracht", Integer.parseInt(opdrachten.get(position).getOpdrNr()));
             startActivity(intent);
             trackClick(opdrachten.get(position).getOpdrNr());
     }

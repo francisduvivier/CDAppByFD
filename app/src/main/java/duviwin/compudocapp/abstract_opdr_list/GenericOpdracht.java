@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.html_info.HtmlInfoEnum;
-import duviwin.compudocapp.opdracht_details.DetailedOpdracht;
 
 /**
  * Created by Francis Duvivier on 19.07.15.
@@ -46,7 +45,7 @@ public abstract class GenericOpdracht implements Serializable {
     public String getOpdrNr(){
         return shrtInfo[htmlInfo.getOpdrNrIndex()];
     }
-    public DetailedOpdracht makeDetailedOpdr() {
-        return new DetailedOpdracht(Integer.parseInt(shrtInfo[htmlInfo.getOpdrNrIndex()]));
-    }
+//    public DetailedOpdracht makeDetailedOpdr() {
+//        return new DetailedOpdracht(Integer.parseInt(shrtInfo[htmlInfo.getOpdrNrIndex()]));
+//    }
 }
