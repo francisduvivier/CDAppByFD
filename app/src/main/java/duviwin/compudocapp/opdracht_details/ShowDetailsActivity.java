@@ -24,6 +24,7 @@ import duviwin.compudocapp.MainActivity;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.SettingsActivity;
 import duviwin.compudocapp.trial_check.TrialChecker;
+import duviwin.compudocapp.usage_stats.MyTracker;
 
 
 public class ShowDetailsActivity extends ActionBarActivity {
@@ -44,27 +45,30 @@ public class ShowDetailsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        analytics = GoogleAnalytics.getInstance(this);
-        tracker = analytics.newTracker("UA-65610134-1"); // Replace with actual tracker/property Id
-        tracker.enableExceptionReporting(true);
-        tracker.enableAutoActivityTracking(true);
+
 
         AppSettings.refreshPrefs(getBaseContext());
         setContentView(R.layout.activity_show_details);
         Intent intent = getIntent();
         opdracht = (DetailedOpdracht) intent.getSerializableExtra("opdracht");
         if (opdracht == null) {
+        MyTracker.startAnalytics(this);
             //In this case this is a call from an URI
             String url = intent.getData().toString();
             if (url.contains("opdrachtnr=")){
+
             String opdrNr=url.replaceAll(".*opdrachtnr=([\\d]*).*", "$1");
                 opdracht = new DetailedOpdracht(Integer.parseInt(opdrNr));
+                MyTracker.send(getString(R.string.open_from_uri), getString(R.string.open_from_uri_good), "OpdrNr:" + opdracht.opdrNr)
+                        ;
             }
             else{
                 //If the activity is launched with an url that does not have an opdrachtnummer, we just launch the main activity
                 finish();
                 Intent showMain = new Intent(this, MainActivity.class);
                 startActivity(showMain);
+                MyTracker.send(getString(R.string.open_from_uri), getString(R.string.open_from_uri_bad), url.replace("compodoc.be/index.php", "..."))
+                        ;
                 return;
             }
 
@@ -192,15 +196,19 @@ public class ShowDetailsActivity extends ActionBarActivity {
     }
 
     public void bieden(View view) {
+
         EditText minBodView = (EditText) findViewById(R.id.min_bod);
         EditText maxBodView = (EditText) findViewById(R.id.max_bod);
         int minBod = Integer.parseInt(minBodView.getText().toString());
         int maxBod = Integer.parseInt(maxBodView.getText().toString());
-
         opdracht.bied(minBod, maxBod, this);
+        MyTracker.send(getString(R.string.detail_item_click), getString(R.string.stuur_bod), "OpdrNr:" + opdracht.opdrNr)
+                ;
     }
     public void opeisen(View view) {
         opdracht.eisOp(this);
+        MyTracker.send(getString(R.string.detail_item_click), getString(R.string.eis_op), "OpdrNr:" + opdracht.opdrNr)
+                ;
     }
 
     public void openMaps(View view) {
@@ -212,6 +220,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
         Uri geoLocation = Uri.parse("http://maps.google.com/maps?daddr=" + destinationString + "&saddr=" + startString);
 
         launchActivity(geoLocation);
+        MyTracker.send(getString(R.string.detail_item_click), getString(R.string.open_maps), "OpdrNr:" + opdracht.opdrNr)
+                ;
     }
 
     public void bellen(View view) {
@@ -220,6 +230,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
         Log.d("CallClick", "tel: " + telnr);
         Log.d("CallClick", "uri: " + uri.toString());
         launchActivity(uri);
+        MyTracker.send(getString(R.string.detail_item_click), getString(R.string.bel_op), "OpdrNr:" + opdracht.opdrNr)
+                ;
 
     }
 

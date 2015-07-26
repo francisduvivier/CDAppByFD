@@ -7,12 +7,6 @@ import duviwin.compudocapp.abstract_opdr_list.GenericOpdracht;
 
 /**
  * A fragment representing a list of Items.
- * <p>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
  */
 public class MijnOpdrFragment extends AbstrOpdrListFragment<GenericOpdracht> {
     public MijnOpdrFragment(){
@@ -22,5 +16,10 @@ public class MijnOpdrFragment extends AbstrOpdrListFragment<GenericOpdracht> {
     @Override
     protected AbstrOpdrItemAdapter createAdapter(){
         return new MijnOpdrAdapter(new MijnOpdrHtmlInfo(),getActivity(), R.layout.opdracht_item,opdrachten);
+    }
+
+    @Override
+    public String getActionString() {
+        return getString(R.string.open_from_mijn_opdr);
     }
 }

@@ -11,14 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 
 import java.util.Locale;
 
@@ -27,13 +21,15 @@ import duviwin.compudocapp.Events.EventSystem;
 import duviwin.compudocapp.mijn_afspraken.MijnAfsprFragment;
 import duviwin.compudocapp.mijn_opdrachten.MijnOpdrFragment;
 import duviwin.compudocapp.open_opdrachten.OpenOpdrFragment;
+import duviwin.compudocapp.trial_check.TrialChecker;
+import duviwin.compudocapp.usage_stats.MyTracker;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener
 //        , MijnOpdrFragment.OnFragmentInteractionListener
 {
 
-    private static final int REQ_CODE_SETTINGS_MAIN = 01;
+    private static final int REQ_CODE_SETTINGS_MAIN = 1;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -44,10 +40,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
     Connection conn;
-    public static GoogleAnalytics analytics;
-    public static Tracker tracker;
 
-    public void onFragmentInteraction(String id){}
+//    public void onFragmentInteraction(String id){}
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -59,13 +53,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         EventSystem.context=getApplicationContext();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TrialChecker.checkTrial(System.currentTimeMillis(),this);
 
-
-        analytics = GoogleAnalytics.getInstance(this);
-        tracker = analytics.newTracker("UA-65610134-1"); // Replace with actual tracker/property Id
-        tracker.enableExceptionReporting(true);
-        tracker.enableAutoActivityTracking(true);
-
+        MyTracker.startAnalytics(this);
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -156,14 +146,28 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
         mViewPager.setCurrentItem(tab.getPosition());
+//        new AlertDialog.Builder(this)
+//                .setTitle("onTabSelected: "+ tab.getText())
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .show();
+        MyTracker.send(getString(R.string.main_tab_select), "Main Tab: " + tab.getText(), null);
+
     }
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+//        new AlertDialog.Builder(this)
+//                .setTitle("onTabUnselected: "+ tab.getText())
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .show();
     }
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+//                new AlertDialog.Builder(this)
+//                .setTitle("onTabReselected: "+ tab.getText())
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .show();
     }
 
     /**
@@ -188,7 +192,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 case 2:
                     return new MijnAfsprFragment();
             default:
-                return PlaceholderFragment.newInstance(position);
+                return new OpenOpdrFragment();
             }
         }
 
@@ -215,38 +219,38 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-    }
+//    /**
+//     * A placeholder fragment containing a simple view.
+//     */
+//    public static class PlaceholderFragment extends Fragment {
+//        /**
+//         * The fragment argument representing the section number for this
+//         * fragment.
+//         */
+//        private static final String ARG_SECTION_NUMBER = "section_number";
+//
+//        /**
+//         * Returns a new instance of this fragment for the given section
+//         * number.
+//         */
+//        public static PlaceholderFragment newInstance(int sectionNumber) {
+//            PlaceholderFragment fragment = new PlaceholderFragment();
+//            Bundle args = new Bundle();
+//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+//            fragment.setArguments(args);
+//            return fragment;
+//
+//        }
+//
+//        public PlaceholderFragment() {
+//        }
+//
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+//            return rootView;
+//        }
+//    }
 
 }

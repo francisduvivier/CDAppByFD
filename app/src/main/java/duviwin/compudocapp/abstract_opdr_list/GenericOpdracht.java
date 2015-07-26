@@ -9,7 +9,7 @@ import duviwin.compudocapp.html_info.HtmlInfoEnum;
 import duviwin.compudocapp.opdracht_details.DetailedOpdracht;
 
 /**
- * Created by duvibuntu on 19.07.15.
+ * Created by Francis Duvivier on 19.07.15.
  */
 public abstract class GenericOpdracht implements Serializable {
     public final String[] shrtInfo;
@@ -29,7 +29,7 @@ public abstract class GenericOpdracht implements Serializable {
     }
     public GenericOpdracht(HtmlInfo hi, String[] vals) {
         for(String val:vals){
-            Log.d("ShortOpdracht", val);}
+            Log.d("GenericOpdracht", val);}
         this.htmlInfo = hi;
         this.shrtInfo = new String[hi.getVals().length];
         this.isDummy=false;
@@ -42,6 +42,9 @@ public abstract class GenericOpdracht implements Serializable {
             }
         }
 
+    }
+    public String getOpdrNr(){
+        return shrtInfo[htmlInfo.getOpdrNrIndex()];
     }
     public DetailedOpdracht makeDetailedOpdr() {
         return new DetailedOpdracht(Integer.parseInt(shrtInfo[htmlInfo.getOpdrNrIndex()]));

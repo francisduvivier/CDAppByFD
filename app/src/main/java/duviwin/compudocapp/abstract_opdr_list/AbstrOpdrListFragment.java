@@ -1,7 +1,6 @@
 package duviwin.compudocapp.abstract_opdr_list;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,6 +20,7 @@ import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.opdracht_details.ShowDetailsActivity;
+import duviwin.compudocapp.usage_stats.MyTracker;
 
 /**
  * A fragment representing a list of Items.
@@ -109,22 +109,22 @@ public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends F
         return view;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-    }
+//    @Override
+//    public void onAttach(Activity activity) {
+//        super.onAttach(activity);
+//        new AlertDialog.Builder(activity)
+//                .setTitle("An attach happened")
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .show();
+//    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-//        mListener = null;
-    }
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//        new AlertDialog.Builder(getActivity())
+//                .setTitle("A detach happened")
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .show();    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -134,8 +134,24 @@ public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends F
            Intent intent=new Intent(getActivity(),ShowDetailsActivity.class);
             intent.putExtra("opdracht",opdrachten.get(position).makeDetailedOpdr());
             startActivity(intent);
-
+            trackClick(opdrachten.get(position).getOpdrNr());
     }
+    }
+
+    protected void trackClick(String opdrNrStr){
+        long opdrNr;
+        //this try catch code tries to get the opdrnr from the opdracht,
+        // but if it fails because it is a dummy or something, this will be reported to statistics by the -1 or -2 value.
+        try {
+            opdrNr = Integer.parseInt(opdrNrStr);
+        } catch (Exception nfe) {
+            if (nfe.getClass().equals(NumberFormatException.class)) {
+                opdrNr = -1;
+            } else {
+                opdrNr = -2;
+            }
+        }
+        MyTracker.send(getString(R.string.list_item_click),getActionString(),"OpdrNr:" + opdrNr);
     }
 
     /**
@@ -162,20 +178,22 @@ public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends F
         return listRetriever;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(String id);
-    }
+    public abstract String getActionString();
+
+//    /**
+//     * This interface must be implemented by activities that contain this
+//     * fragment to allow an interaction in this fragment to be communicated
+//     * to the activity and potentially other fragments contained in that
+//     * activity.
+//     * <p>
+//     * See the Android Training lesson <a href=
+//     * "http://developer.android.com/training/basics/fragments/communicating.html"
+//     * >Communicating with Other Fragments</a> for more information.
+//     */
+//    public interface OnFragmentInteractionListener {
+//        // TODO: Update argument type and name
+//        void onFragmentInteraction(String id);
+//    }
     private class HttpAsyncTask extends AsyncTask<AbstrOpdrListFragment, Void, List<GenericOpdracht>> {
         private AbstrOpdrListFragment f;
 

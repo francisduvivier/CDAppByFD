@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CompudocApp</string>
+    <string name="app_name">Compudoc App</string>
 
     <string name="title_open">Open Opdrachten</string>
     <string name="title_factuur">Facturen</string>
@@ -11,8 +11,7 @@
     <string name="action_settings">Settings</string>
 
 <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_opdracht_details">Details Opdracht</string>
-    <string name="title_activity_show_details">ShowDetailsActivity</string>
+    <string name="title_activity_show_details">Opdracht Details</string>
     <string name="stuur_bod">Bieden!</string>
     <string name="eis_op">Opeisen!</string>
     <string name="min_bod">Minimum bod: </string>
@@ -20,11 +19,23 @@
     <string name="fb_score">Feedback score: </string>
     <string name="det_huidig_bod">Huidig bod: </string>
     <string name="det_opdr_stand">Jouw opdrachtenstand:</string>
-    <string name="action_refresh">refresh</string>
+    <string name="action_refresh">Refresh</string>
     <string name="pref_title_def_loc">Start-locatie voor route-berekening</string>
     <string name="route_start_summary">eg. Diestsesteenweg 423, Leuven, Laat leeg om route te laten berekenen van huidige locatie</string>
-    <string name="afspraaktijd">afspraaktijd: </string>
-    <string name="internetverbinding">internetverbinding: </string>
-    <string name="voorkeurstechnieker">voorkeur: </string>
+    <string name="afspraaktijd">Afspraaktijd: </string>
+    <string name="internetverbinding">Internetverbinding: </string>
+    <string name="voorkeurstechnieker">Voorkeur: </string>
     <string name="leadOwner">lead owner: </string>
+    <string name="opdr_nr">Opdrachtnummer</string>
+    <string name="open_maps">Open Maps</string>
+    <string name="bel_op">Bel op</string>
+    <string name="open_from_uri_good">Open opdracht details  from good uri</string>
+    <string name="open_from_uri_bad">Open opdracht details from bad uri</string>
+    <string name="open_from_open_opdr">Onclick from open opdrachten list</string>
+    <string name="open_from_mijn_opdr">Onclick from mijn opdrachten list</string>
+    <string name="open_from_mijn_afspr">Onclick from mijn afspraken list</string>
+    <string name="list_item_click">Click on list item</string>
+    <string name="detail_item_click">Click on detail item</string>
+    <string name="open_from_uri">open opdrachtdetails from an URI</string>
+    <string name="main_tab_select">OnTabSelected in Mainactivity</string>
 </resources>
