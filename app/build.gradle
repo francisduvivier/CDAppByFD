@@ -8,8 +8,8 @@ android {
         applicationId "duviwin.compudocapp"
         minSdkVersion 9
         targetSdkVersion 22
-        versionCode 270
-        versionName "2.7.0"
+        versionCode 280
+        versionName "2.8.0"
     }
     buildTypes {
         release {

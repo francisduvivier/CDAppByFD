@@ -1,5 +1,6 @@
 package duviwin.compudocapp.opdracht_details;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -94,6 +95,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
     }
 
     public void update(DetailedOpdracht opdr) {
+        ((LinearLayout) findViewById(R.id.enkel_voor_open)).removeAllViews();
+        try{
         int i = 0;
         for (String prop : opdr.allProperties) {
             try {
@@ -109,14 +112,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
         }
 
         try {
-            ((TextView) findViewById(DetailedOpdracht.getPropertyId("huidigbod"))).setText(opdr.getProperty("huidigbod").replace("&euro;", "€").replace(". ,", ".").replace("\n ", "\n"));
-            findViewById(DetailedOpdracht.getPropertyId("klantnr")).setBackgroundColor(opdr.getKlantNrKleur());
-            findViewById(DetailedOpdracht.getPropertyId("gepost")).setBackgroundColor(opdr.getTijdKleur());
-            ((LinearLayout) findViewById(DetailedOpdracht.getPropertyId("straat")).getParent().getParent()).setBackgroundColor(opdr.getAdresKleur());
-            findViewById(DetailedOpdracht.getPropertyId("omschrijving")).setBackgroundColor(opdr.getOmschrijvingKleur());
-            ((TextView) findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
+
             if (opdr.biedenIsAfgelopen()) {
-                ((LinearLayout) findViewById(R.id.enkel_voor_open)).removeAllViews();
 
                 addOptionalInfo();
 
@@ -138,16 +135,40 @@ public class ShowDetailsActivity extends ActionBarActivity {
 
                     }
                 }
+            }else{
 
-            }else if(opdr.gebruikerHeeftVoorrecht()){
-                ((LinearLayout) findViewById(R.id.enkel_voor_open)).removeAllViews();
-                addOpeisKnop((LinearLayout) findViewById(R.id.enkel_voor_open));
+                LinearLayout bodView = (LinearLayout)getLayoutInflater().inflate(R.layout.fragment_enkel_voor_open, null);
+                TextView huidigBodView=((TextView) bodView.findViewById(DetailedOpdracht.getPropertyId("huidigbod")));
+                huidigBodView.setText(opdr.getProperty("huidigbod").replace("&euro;", "€").replace(". ,", ".").replace("\n ", "\n"));
+                ((LinearLayout) findViewById(R.id.enkel_voor_open)).addView(bodView);
+                ((TextView) bodView.findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
+
+                if (opdr.gebruikerHeeftVoorrecht()) {
+                    View resultView=bodView.findViewById(R.id.det_bod_result);
+                    bodView.removeAllViews();
+                    bodView.addView(huidigBodView);
+                    bodView.addView(resultView);
+                    addOpeisKnop((LinearLayout) findViewById(R.id.enkel_voor_open));
+
+                }
             }
+            findViewById(DetailedOpdracht.getPropertyId("klantnr")).setBackgroundColor(opdr.getKlantNrKleur());
+            findViewById(DetailedOpdracht.getPropertyId("gepost")).setBackgroundColor(opdr.getTijdKleur());
+            ((LinearLayout) findViewById(DetailedOpdracht.getPropertyId("straat")).getParent().getParent()).setBackgroundColor(opdr.getAdresKleur());
+            findViewById(DetailedOpdracht.getPropertyId("omschrijving")).setBackgroundColor(opdr.getOmschrijvingKleur());
         } catch (HasNoPropIdException e) {
             throw new RuntimeException(e.getMessage() + " ,getPropertyId(\"gepost\") or getPropertyId(\"huidigbod\") seems to have thrown a HasNoPropIdException, this is very weird.");
         }
-
         TrialChecker.checkTrial(DetailedOpdracht.calcMillis(opdr.getProperty("gepost")),this);
+        }catch (Exception e){
+            e.printStackTrace();
+            new AlertDialog.Builder(this)
+                    .setTitle("There seems to be no connectivity!")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+//            finish();
+        }
+
     }
 
     private void addOpeisKnop(LinearLayout linearLayout) {

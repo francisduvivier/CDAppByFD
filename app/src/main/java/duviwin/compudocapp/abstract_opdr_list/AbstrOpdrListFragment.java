@@ -24,12 +24,6 @@ import duviwin.compudocapp.usage_stats.MyTracker;
 
 /**
  * A fragment representing a list of Items.
- * <p>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
  */
 public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends Fragment implements AbsListView.OnItemClickListener
 //        , MyEventListener
