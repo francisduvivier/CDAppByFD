@@ -5,7 +5,6 @@ import android.util.Log;
 import java.util.regex.Matcher;
 
 import duviwin.compudocapp.abstract_opdr_list.AbstrListRetriever;
-import duviwin.compudocapp.abstract_opdr_list.GenericOpdracht;
 
 public class OpenOpdrRetriever extends AbstrListRetriever {
 

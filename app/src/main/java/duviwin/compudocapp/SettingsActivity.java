@@ -1,8 +1,6 @@
 package duviwin.compudocapp;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -137,6 +135,7 @@ public class SettingsActivity extends PreferenceActivity {
     public static class GeneralPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
+
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(pref_general);
 

@@ -17,6 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.Locale;
 
 import duviwin.compudocapp.Connection.Connection;
@@ -41,6 +44,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
     Connection conn;
+    public static GoogleAnalytics analytics;
+    public static Tracker tracker;
 
     public void onFragmentInteraction(String id){}
 
@@ -54,6 +59,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         EventSystem.context=getApplicationContext();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        analytics = GoogleAnalytics.getInstance(this);
+        tracker = analytics.newTracker("UA-65610134-1"); // Replace with actual tracker/property Id
+        tracker.enableExceptionReporting(true);
+        tracker.enableAutoActivityTracking(true);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();

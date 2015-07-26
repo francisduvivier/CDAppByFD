@@ -1,7 +1,5 @@
 package duviwin.compudocapp.open_opdrachten;
 
-import java.util.List;
-
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrItemAdapter;
 import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrListFragment;

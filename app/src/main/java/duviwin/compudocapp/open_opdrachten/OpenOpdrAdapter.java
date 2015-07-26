@@ -1,7 +1,6 @@
 package duviwin.compudocapp.open_opdrachten;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import java.util.List;
 
 import duviwin.compudocapp.abstract_opdr_list.AbstrOpdrItemAdapter;
 import duviwin.compudocapp.abstract_opdr_list.GenericOpdracht;
-import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.open_opdrachten.OpenOpdrHtmlInfo.Nms;
 /**
  * Created by Duviwin on 6/15/2015.

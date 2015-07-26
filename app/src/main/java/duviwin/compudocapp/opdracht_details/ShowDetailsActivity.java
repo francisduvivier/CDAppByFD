@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.List;
 
 import duviwin.compudocapp.AppSettings;
@@ -35,9 +38,17 @@ public class ShowDetailsActivity extends ActionBarActivity {
             startActivity(intent);
         }
     }
+    public static GoogleAnalytics analytics;
+    public static Tracker tracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        analytics = GoogleAnalytics.getInstance(this);
+        tracker = analytics.newTracker("UA-65610134-1"); // Replace with actual tracker/property Id
+        tracker.enableExceptionReporting(true);
+        tracker.enableAutoActivityTracking(true);
+
         AppSettings.refreshPrefs(getBaseContext());
         setContentView(R.layout.activity_show_details);
         Intent intent = getIntent();
