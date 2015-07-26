@@ -18,7 +18,7 @@ public class MyTracker {
     public static void startAnalytics(Context context){
         analytics=GoogleAnalytics.getInstance(context);
         tracker = analytics.newTracker("UA-65610134-1");//for my own usage
-//        tracker = a nalytics.newTracker("UA-65610134-2");//for play store usage
+//        tracker = analytics.newTracker("UA-65610134-2");//for play store usage
 //        tracker = analytics.newTracker("UA-65610134-3");//for dropbox usage
         tracker.enableExceptionReporting(true);
         tracker.enableAutoActivityTracking(true);
