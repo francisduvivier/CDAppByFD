@@ -15,7 +15,7 @@ public class MijnOpdrFragment extends AbstrOpdrListFragment<GenericOpdracht> {
 
     @Override
     protected AbstrOpdrItemAdapter createAdapter(){
-        return new MijnOpdrAdapter(new MijnOpdrHtmlInfo(),getActivity(), R.layout.opdracht_item,opdrachten);
+        return new MijnOpdrAdapter(getActivity(), R.layout.opdracht_item,opdrachten);
     }
 
     @Override

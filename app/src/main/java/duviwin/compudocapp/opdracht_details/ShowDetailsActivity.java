@@ -2,6 +2,7 @@ package duviwin.compudocapp.opdracht_details;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -156,6 +157,9 @@ public class ShowDetailsActivity extends ActionBarActivity {
             findViewById(DetailedOpdracht.getPropertyId("gepost")).setBackgroundColor(opdr.getTijdKleur());
             ((LinearLayout) findViewById(DetailedOpdracht.getPropertyId("straat")).getParent().getParent()).setBackgroundColor(opdr.getAdresKleur());
             findViewById(DetailedOpdracht.getPropertyId("omschrijving")).setBackgroundColor(opdr.getOmschrijvingKleur());
+            if(opdr.getProperty("voorkeur").contains("nr.")){
+            ((TextView)findViewById(DetailedOpdracht.getPropertyId("voorkeur"))).setTypeface(null, Typeface.BOLD);}
+
         } catch (HasNoPropIdException e) {
             throw new RuntimeException(e.getMessage() + " ,getPropertyId(\"gepost\") or getPropertyId(\"huidigbod\") seems to have thrown a HasNoPropIdException, this is very weird.");
         }
