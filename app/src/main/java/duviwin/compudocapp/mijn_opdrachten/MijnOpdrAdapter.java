@@ -29,7 +29,7 @@ public class MijnOpdrAdapter extends AbstrOpdrItemAdapter {
 
         if(opdr.shrtInfo[MijnOpdrHtmlInfo.Nms.tijdVoorBod.getIndex()].contains("te laat")){
             viewHolder.tvs[MijnOpdrHtmlInfo.Nms.tijdVoorBod.getIndex()].setBackgroundColor(Color.parseColor("red"));
-        }else if(!opdr.shrtInfo[MijnOpdrHtmlInfo.Nms.tijdVoorBod.getIndex()].contains("u")){
+        }else if(!opdr.shrtInfo[MijnOpdrHtmlInfo.Nms.tijdVoorBod.getIndex()].contains("d")){
             viewHolder.tvs[MijnOpdrHtmlInfo.Nms.tijdVoorBod.getIndex()].setTextColor(Color.parseColor("blue"));
         }}
 //        ((LinearLayout) viewHolder.tvs[Nms.opdrachtNr.index].getParent()).setBackgroundColor(opdr.getNumberClr());
