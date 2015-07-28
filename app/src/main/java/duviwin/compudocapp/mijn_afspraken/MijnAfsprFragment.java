@@ -15,7 +15,7 @@ public class MijnAfsprFragment extends AbstrOpdrListFragment<GenericOpdracht> {
 
     @Override
     protected AbstrOpdrItemAdapter createAdapter(){
-        return new MijnAfsprAdapter(new MijnAfsprHtmlInfo(),getActivity(), R.layout.fragment_afspr_item,opdrachten);
+        return new MijnAfsprAdapter(getActivity(), R.layout.fragment_afspr_item,opdrachten);
     }
     @Override
     public String getActionString() {

@@ -1,7 +1,6 @@
 package duviwin.compudocapp.abstract_opdr_list;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -206,10 +205,7 @@ public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends F
     @Override
     protected void onPostExecute(List<GenericOpdracht> result) {
         if (result == null) {
-            new AlertDialog.Builder(f.getActivity())
-                    .setTitle("Username of wachtwoord fout, pas aan in instellingen AUB!")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
+           BadCredentialsException.showException(f.getActivity());
         } else {
             f.fillAdapter(result);
         }
