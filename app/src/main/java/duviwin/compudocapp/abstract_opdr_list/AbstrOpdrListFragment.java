@@ -18,6 +18,7 @@ import java.util.List;
 
 import duviwin.compudocapp.AppSettings;
 import duviwin.compudocapp.Connection.BadCredentialsException;
+import duviwin.compudocapp.Connection.MyFailedConnectionException;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.html_info.HtmlInfo;
 import duviwin.compudocapp.opdracht_details.ShowDetailsActivity;
@@ -189,25 +190,34 @@ public abstract class AbstrOpdrListFragment<E extends GenericOpdracht> extends F
 //        // TODO: Update argument type and name
 //        void onFragmentInteraction(String id);
 //    }
-    private class HttpAsyncTask extends AsyncTask<AbstrOpdrListFragment, Void, List<GenericOpdracht>> {
+    private class HttpAsyncTask extends AsyncTask<AbstrOpdrListFragment, Void, Object> {
         private AbstrOpdrListFragment f;
 
         @Override
-        protected List<GenericOpdracht> doInBackground(AbstrOpdrListFragment... fragments) {
+        protected Object doInBackground(AbstrOpdrListFragment... fragments) {
             this.f = fragments[0];
             AbstrListRetriever oi = f.getListRetriever();
             try{oi.downloadOpdrachten();}catch (BadCredentialsException e){
-            return null;
+            return e;
+            }catch (MyFailedConnectionException e){
+                return e;
             }
             return oi.opdrachten;
         }
 
     @Override
-    protected void onPostExecute(List<GenericOpdracht> result) {
-        if (result == null) {
-           BadCredentialsException.showException(f.getActivity());
-        } else {
-            f.fillAdapter(result);
+    protected void onPostExecute(Object result) {
+        if (result.getClass().equals(BadCredentialsException.class)) {
+           BadCredentialsException.handleException(f.getActivity());
+
+        }
+        else if(result.getClass().equals(MyFailedConnectionException.class)){
+            MyFailedConnectionException.showException(f.getActivity());
+        }
+        else {
+
+            List<GenericOpdracht> list=(List<GenericOpdracht>) result;
+            f.fillAdapter(list);
         }
     }
 }

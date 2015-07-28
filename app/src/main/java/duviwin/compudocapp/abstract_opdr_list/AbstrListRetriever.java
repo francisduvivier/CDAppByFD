@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import duviwin.compudocapp.Connection.BadCredentialsException;
 import duviwin.compudocapp.Connection.Connection;
+import duviwin.compudocapp.Connection.MyFailedConnectionException;
 import duviwin.compudocapp.html_info.HtmlInfo;
 
 public abstract class AbstrListRetriever {
@@ -20,10 +21,11 @@ public abstract class AbstrListRetriever {
 		opdrachten = new ArrayList<GenericOpdracht>();
 	}
 
-	public void downloadOpdrachten() throws BadCredentialsException{
-		opdrachten.clear();
+	public void downloadOpdrachten() throws BadCredentialsException,MyFailedConnectionException{
+
 		Matcher m=getPreparedMatcher();
-		Log.d("listRetrieverMatch", "Strarting trying to match");
+			opdrachten.clear();
+			Log.d("listRetrieverMatch", "Strarting trying to match");
 
 		while (m.find()) {
 				Log.d("listRetrieverMatch",""+m.group());
@@ -44,10 +46,13 @@ public abstract class AbstrListRetriever {
 
 	public abstract String getUrl();
 
-	public Matcher getPreparedMatcher() throws BadCredentialsException{
+	public Matcher getPreparedMatcher() throws BadCredentialsException,MyFailedConnectionException{
 		String fullPage = Connection.getConnection().doGet(
 				getUrl(), "");
 		String line = fullPage;
+		if(fullPage==null||fullPage.isEmpty()){
+			throw new MyFailedConnectionException();
+		}
 		Log.d("listretriever","tried getting url: "+getUrl()+", resultString is of length: "+line.length());
 
 		String pattern = htmlInfo.getPattern();

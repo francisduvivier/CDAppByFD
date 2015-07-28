@@ -1,6 +1,5 @@
 package duviwin.compudocapp.opdracht_details;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -22,6 +21,7 @@ import com.google.android.gms.analytics.Tracker;
 import java.util.List;
 
 import duviwin.compudocapp.AppSettings;
+import duviwin.compudocapp.Connection.MyFailedConnectionException;
 import duviwin.compudocapp.MainActivity;
 import duviwin.compudocapp.R;
 import duviwin.compudocapp.SettingsActivity;
@@ -166,11 +166,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
         }
         TrialChecker.checkTrial(DetailedOpdracht.calcMillis(opdr.getProperty("gepost")),this);
         }catch (Exception e){
-            e.printStackTrace();
-            new AlertDialog.Builder(this)
-                    .setTitle("There seems to be no connectivity!")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
+//            e.printStackTrace();
+            MyFailedConnectionException.showException(this);
         }
 
     }

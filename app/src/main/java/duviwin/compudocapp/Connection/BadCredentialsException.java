@@ -13,8 +13,8 @@ public class BadCredentialsException extends Exception{
     public static final String NOTIFY_STRING = "Bad Credentials";
     private static long latestAlertTime=0;
 
-    public static void showException(FragmentActivity activity) {
-       if(System.currentTimeMillis()-latestAlertTime> 10*1000){
+    public static void handleException(FragmentActivity activity) {
+       if(System.currentTimeMillis()-latestAlertTime> 2*1000){
            Intent showSettings=new Intent(activity,SettingsActivity.class);
            showSettings.putExtra(null,NOTIFY_STRING);
            activity.startActivityForResult(showSettings, MainActivity.REQ_CODE_SETTINGS_MAIN);
