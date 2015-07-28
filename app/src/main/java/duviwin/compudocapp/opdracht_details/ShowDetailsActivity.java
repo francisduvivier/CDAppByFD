@@ -97,6 +97,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
 
     public void update(DetailedOpdracht opdr) {
         ((LinearLayout) findViewById(R.id.enkel_voor_open)).removeAllViews();
+        LinearLayout bodView = (LinearLayout)getLayoutInflater().inflate(R.layout.fragment_enkel_voor_open, null);
+        ((LinearLayout) findViewById(R.id.enkel_voor_open)).addView(bodView);
         try{
         int i = 0;
         for (String prop : opdr.allProperties) {
@@ -115,7 +117,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
         try {
 
             if (opdr.biedenIsAfgelopen()) {
-
+                bodView.removeAllViews();
                 addOptionalInfo();
 
 
@@ -138,10 +140,9 @@ public class ShowDetailsActivity extends ActionBarActivity {
                 }
             }else{
 
-                LinearLayout bodView = (LinearLayout)getLayoutInflater().inflate(R.layout.fragment_enkel_voor_open, null);
+
                 TextView huidigBodView=((TextView) bodView.findViewById(DetailedOpdracht.getPropertyId("huidigbod")));
                 huidigBodView.setText(opdr.getProperty("huidigbod").replace("&euro;", "€").replace(". ,", ".").replace("\n ", "\n"));
-                ((LinearLayout) findViewById(R.id.enkel_voor_open)).addView(bodView);
                 ((TextView) bodView.findViewById(R.id.det_bod_result)).setText(opdr.bodResult);
 
                 if (opdr.gebruikerHeeftVoorrecht()) {
