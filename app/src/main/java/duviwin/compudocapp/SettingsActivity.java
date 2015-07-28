@@ -1,6 +1,7 @@
 package duviwin.compudocapp;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -9,6 +10,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+
+import duviwin.compudocapp.Connection.BadCredentialsException;
 
 import static duviwin.compudocapp.R.xml.pref_general;
 
@@ -35,6 +38,12 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getIntent().getStringExtra(null)!=null&&getIntent().getStringExtra(null).equals(BadCredentialsException.NOTIFY_STRING)){
+            new AlertDialog.Builder(this)
+                    .setTitle("Username of wachtwoord fout!")
+                    .setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton(R.string.ok, null)
+                    .show();
+        }
     }
 
 

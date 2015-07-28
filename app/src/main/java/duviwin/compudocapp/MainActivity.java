@@ -29,7 +29,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 //        , MijnOpdrFragment.OnFragmentInteractionListener
 {
 
-    private static final int REQ_CODE_SETTINGS_MAIN = 1;
+    public static final int REQ_CODE_SETTINGS_MAIN = 1;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a

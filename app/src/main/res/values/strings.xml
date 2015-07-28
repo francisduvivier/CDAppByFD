@@ -38,4 +38,5 @@
     <string name="detail_item_click">Click on detail item</string>
     <string name="open_from_uri">open opdrachtdetails from an URI</string>
     <string name="main_tab_select">OnTabSelected in Mainactivity</string>
+    <string name="ok">OK!</string>
 </resources>
