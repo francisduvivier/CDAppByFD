@@ -148,6 +148,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
                 if (opdr.gebruikerHeeftVoorrecht()) {
                     View resultView=bodView.findViewById(R.id.det_bod_result);
                     bodView.removeAllViews();
+                    ((LinearLayout) huidigBodView.getParent()).removeView(huidigBodView);
                     bodView.addView(huidigBodView);
                     bodView.addView(resultView);
                     addOpeisKnop((LinearLayout) findViewById(R.id.enkel_voor_open));
@@ -166,7 +167,8 @@ public class ShowDetailsActivity extends ActionBarActivity {
         }
         TrialChecker.checkTrial(DetailedOpdracht.calcMillis(opdr.getProperty("gepost")),this);
         }catch (Exception e){
-//            e.printStackTrace();
+            Log.d("MyFailedConnectionExc","check this:");
+            e.printStackTrace();
             MyFailedConnectionException.showException(this);
         }
 
