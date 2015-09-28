@@ -84,7 +84,7 @@ public class DetailedOpdracht implements Serializable {
 	//Deze methode zorgt ervoor dat extra info over de opdracht opgehaald wordt via de opdrachtlink en dat die info dan hier in het object gezet wordt.
 	public void getExtraInfo(){
 		try{
-		String opdrachtUrl = "http://www.compudoc.be/index.php?page=opdrachten/detail&opdrachtnr="
+		String opdrachtUrl = "https://www.compudoc.be/index.php?page=opdrachten/detail&opdrachtnr="
 				+ opdrNr
 				;
 
@@ -259,7 +259,7 @@ public class DetailedOpdracht implements Serializable {
 				@Override
 				protected String doInBackground(Void... params) {
 					try{
-					String result=Connection.getConnection().doPost("http://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + DetailedOpdracht.this.opdrNr +
+					String result=Connection.getConnection().doPost("https://www.compudoc.be/index.php?page=opdrachten/bieden", "bod=" + bod + "&opdrachtnr=" + DetailedOpdracht.this.opdrNr +
 							"&bieder=" + AppSettings.userName + "&pagina=%2Findex.php%3Fpage%3Dopdrachten%2Fdetail%26opdrachtnr%3D" + DetailedOpdracht.this.opdrNr +
 							"&max_bod=" + maxBod + "&"+submitter);
 					result="result: "+result.replaceAll(".*<div class=\"notification[^>]*\">([^<]*)<.*","$1");

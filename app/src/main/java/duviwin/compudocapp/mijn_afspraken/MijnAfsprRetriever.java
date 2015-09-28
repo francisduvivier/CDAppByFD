@@ -9,6 +9,6 @@ public class MijnAfsprRetriever extends AbstrListRetriever {
 	}
 	@Override
 	public String getUrl() {
-		return "http://compudoc.be/index.php?page=appointment/modify&cat=informatie&ond=114&head_menu=11";
+		return "https://www.compudoc.be/index.php?page=appointment/modify&cat=informatie&ond=114&head_menu=11";
 	}
 }

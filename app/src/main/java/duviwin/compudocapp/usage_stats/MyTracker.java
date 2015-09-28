@@ -19,9 +19,8 @@ public class MyTracker {
         analytics=GoogleAnalytics.getInstance(context);
 
         //The following should always be changed together with the build-number in build.gradle
-        tracker = analytics.newTracker("UA-65610134-1");//for my own usage
-//        tracker = analytics.newTracker("UA-65610134-2");//for play store usage
-//        tracker = analytics.newTracker("UA-65610134-3");//for dropbox usage
+//        tracker = analytics.newTracker("UA-65610134-1");//for my own usage
+        tracker = analytics.newTracker("UA-65610134-2");//for play store usage
         tracker.enableExceptionReporting(true);
         tracker.enableAutoActivityTracking(true);
     }

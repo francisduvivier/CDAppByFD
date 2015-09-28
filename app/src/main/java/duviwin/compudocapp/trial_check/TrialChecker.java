@@ -14,7 +14,7 @@ public class TrialChecker {
        Calendar calExpiration = new GregorianCalendar(TimeZone.getTimeZone("Europe/Brussels"));
         //date[1]-1 because January is 0 and not 1
 
-        calExpiration.set(2015,9,1); //1 oktober 2015
+        calExpiration.set(2015,11,1); //1 december 2015
         if(currMillis>calExpiration.getTimeInMillis()){
             stopApp(act);
         }

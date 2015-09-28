@@ -36,7 +36,7 @@ public class Connection implements Serializable,MyPublisher {
 		return currConnection;
 	}
 	private String Login() throws BadCredentialsException{
-		String result=doPost("http://www.compudoc.be/index.php",
+		String result=doPost("https://www.compudoc.be/index.php",
 				"status=login&login_name=" + AppSettings.userName + "&login_password="
 						+ AppSettings.password + "&submit=Login");
 		isLoggedIn=result.contains(LOGIN_SUCCESS);

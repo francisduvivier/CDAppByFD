@@ -46,6 +46,6 @@ public class OpenOpdrRetriever extends AbstrListRetriever {
 	}
 	@Override
 	public String getUrl() {
-			return "http://compudoc.be/index.php?page=opdrachten/open";
+			return "https://www.compudoc.be/index.php?page=opdrachten/open";
 	}
 }

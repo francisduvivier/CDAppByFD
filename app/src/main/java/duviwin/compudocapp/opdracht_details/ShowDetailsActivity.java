@@ -148,8 +148,7 @@ public class ShowDetailsActivity extends ActionBarActivity {
                 if (opdr.gebruikerHeeftVoorrecht()) {
                     View resultView=bodView.findViewById(R.id.det_bod_result);
                     bodView.removeAllViews();
-                    ((LinearLayout) huidigBodView.getParent()).removeView(huidigBodView);
-                    bodView.addView(huidigBodView);
+                    bodView.addView((LinearLayout) huidigBodView.getParent());
                     bodView.addView(resultView);
                     addOpeisKnop((LinearLayout) findViewById(R.id.enkel_voor_open));
 
